@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="js"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+/* 首屏前先确定主题，避免闪烁：优先读上次选择，否则 6:00-18:00 白天、其余夜晚 */
+(function(){
+  var d = document.documentElement; d.classList.add('js');
+  var t = null;
+  try{ t = localStorage.getItem('mc_theme'); }catch(e){}
+  if(t !== 'day' && t !== 'night'){ var h = new Date().getHours(); t = (h >= 6 && h < 18) ? 'day' : 'night'; }
+  d.setAttribute('data-theme', t);
+})();
+</script>
+<title>南风市 · 我的世界建筑作品与收藏集</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="">
+<!-- 南风市 Logo：像素风“南风掠过城市天际线”，原创绘制 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="nanfeng-logo" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect width="16" height="16" fill="#12324a"></rect>
+    <rect y="9" width="16" height="7" fill="#17405c"></rect>
+    <!-- 太阳 -->
+    <rect x="12" y="1" width="3" height="3" fill="#ffd24a"></rect>
+    <rect x="12" y="1" width="1" height="1" fill="#fff3b0"></rect>
+    <!-- 南风：向上卷曲的风线 -->
+    <rect x="1" y="2" width="6" height="1" fill="#e8f6ff"></rect>
+    <rect x="7" y="1" width="2" height="1" fill="#e8f6ff"></rect>
+    <rect x="9" y="2" width="1" height="1" fill="#e8f6ff"></rect>
+    <rect x="0" y="4" width="5" height="1" fill="#bfe3f7"></rect>
+    <rect x="5" y="3" width="2" height="1" fill="#bfe3f7"></rect>
+    <rect x="7" y="4" width="1" height="1" fill="#bfe3f7"></rect>
+    <!-- 天际线 -->
+    <rect x="1" y="10" width="3" height="6" fill="#5dd35d"></rect>
+    <rect x="5" y="7" width="4" height="9" fill="#3aa43a"></rect>
+    <rect x="6" y="6" width="2" height="1" fill="#ffd24a"></rect>
+    <rect x="10" y="9" width="4" height="7" fill="#2f8f2f"></rect>
+    <!-- 窗户 -->
+    <rect x="2" y="12" width="1" height="1" fill="#ffd24a"></rect>
+    <rect x="6" y="9" width="1" height="1" fill="#ffd24a"></rect>
+    <rect x="7" y="11" width="1" height="1" fill="#ffd24a"></rect>
+    <rect x="6" y="13" width="1" height="1" fill="#ffd24a"></rect>
+    <rect x="11" y="11" width="1" height="1" fill="#ffd24a"></rect>
+    <rect x="12" y="13" width="1" height="1" fill="#ffd24a"></rect>
+  </symbol>
+</svg>
+
+<!-- 添加建造日志表单（仅编辑模式可打开） -->
+<div id="logModal" class="modal">
+  <form class="lock-card form-card glass" id="logFormEl" autocomplete="off">
+    <h2>＋ 添加建造日志</h2>
+    <label>日期<input type="date" id="lfDate"></label>
+    <label>版本号 / 阶段标签<input type="text" id="lfStage" maxlength="30" placeholder="如 v0.3 主体结构"></label>
+    <label>分类
+      <select id="lfCat"><option>建筑</option><option>红石</option><option>地形</option><option>优化</option></select>
+    </label>
+    <label>标题<input type="text" id="lfTitle" maxlength="60" placeholder="这次的主题"></label>
+    <label>正文（这次干了什么）<textarea id="lfBody" rows="4" placeholder="写下这次的进展、遇到的问题、用到的方块…"></textarea></label>
+    <label>图片链接（可留空，留空则不显示图片）<input type="text" id="lfImg" placeholder="https://..."></label>
+    <div id="lfMsg"></div>
+    <div class="row">
+      <button class="px-btn" type="submit">发布</button>
+      <button class="px-btn gray" type="button" id="lfCancel">取消</button>
+    </div>
+  </form>
+</div>
+
+<!-- 密码锁 -->
+<div id="lock" class="hide">
+  <div class="lock-card glass">
+    <svg class="logo big" aria-hidden="true"><use href="#nanfeng-logo"></use></svg>
+    <h2>🔒 南风市 · 编辑权限验证</h2>
+    <p>输入密码进入编辑模式。</p>
+    <input type="password" id="pwd" placeholder="请输入密码" autocomplete="off">
+    <div id="lockMsg"></div>
+    <div class="row">
+      <button class="px-btn" id="btnLogin" type="button">进入编辑</button>
+      <button class="px-btn gray" id="btnGuest" type="button">取消</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class=""></div>
+<div id="lightbox"><img src="" alt=""></div>
+
+<!-- 整个站点（保存/导出的范围） -->
+<div id="app"></div>
+<!-- 编辑工具条 -->
+<div id="toolbar" class="glass edit-only">
+  <button class="px-btn small" data-act="save" type="button">💾 保存</button>
+  <button class="px-btn small gray" data-act="bg" type="button">🖼 设置背景图</button>
+  <button class="px-btn small gray" data-act="export" type="button">⬇ 导出HTML</button>
+  <button class="px-btn small danger" data-act="reset" type="button">↺ 重置</button>
+</div>
+<button id="authBtn" class="px-btn small gray" type="button" title="编辑登录" aria-label="编辑登录">🔑</button>
+<script src="data.js"></script>
+<script>
+(function(){
+  'use strict';
+  /* ============ 配置 ============ */
+  var PASSWORD = 'mc2026';            // 修改密码请改这里
+  var KEY = 'mc_showcase_v2';
+
+  var $ = function(s,r){return (r||document).querySelector(s)};
+  var $$ = function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+  var app = $('#app'), editing = false;
+
+  /* ============ 工具 ============ */
+  var toastTimer;
+  function toast(msg, err){
+    var t = $('#toast');
+    t.textContent = msg;
+    t.className = 'show' + (err ? ' err' : '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.className = ''; }, 1800);
+  }
+  function copyText(text){
+    if(navigator.clipboard && window.isSecureContext){
+      return navigator.clipboard.writeText(text).then(function(){return true},function(){return fallback()});
+    }
+    return Promise.resolve(fallback());
+    function fallback(){
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      var ok = false;
+      try{ ok = document.execCommand('copy'); }catch(e){}
+      ta.remove(); return ok;
+    }
+  }
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+  /* ============ 模板 ============ */
+  function imgWrap(cls, alt){
+    return '<div class="img-wrap '+(cls||'')+'">' +
+      '<img src="" alt="'+esc(alt||'')+'" loading="lazy" referrerpolicy="no-referrer">' +
+      '<button class="copy-btn" data-act="copy" type="button">⧉ 复制链接</button>' +
+      '<button class="swap-btn edit-only" data-act="swap" type="button">✎ 换图</button></div>';
+  }
+  var delBtn = '<button class="px-btn small danger edit-only" data-act="del" type="button">🗑 删除</button>';
+  var tpl = {
+    mod: function(n){
+      return '<article class="item glass mod-text">' +
+        '<h3 data-edit contenteditable="false">'+esc(n||'模组名称')+'</h3>' +
+        '<label class="field"><span>组件码</span><input class="code" placeholder="待填写" readonly></label>' +
+        '<label class="field price"><span>售价</span><input class="price-in" placeholder="¥ 0.00" readonly></label>' +
+        delBtn + '</article>';
+    },
+    gal: function(n){
+      return '<figure class="item glass">' + imgWrap('','建筑截图') +
+        '<h3 data-edit contenteditable="false">'+esc(n||'建筑名称')+'</h3>' +
+        '<p class="desc" data-edit contenteditable="false">在这里写下建筑的介绍：风格、建造时长、使用的材料与亮点。</p>' +
+        delBtn + '</figure>';
+    },
+    member: function(n){
+      return '<article class="item glass">' + imgWrap('sq','成员头像') +
+        '<h3 data-edit contenteditable="false">'+esc(n||'Steve_ID')+'</h3>' +
+        '<div class="role" data-edit contenteditable="false">分工：主建筑师</div>' +
+        delBtn + '</article>';
+    }
+  };
+
+  function initGrids(){
+    if(!$('#modGrid').querySelector('.item'))
+      $('#modGrid').innerHTML  = ['模组 A','模组 B','模组 C'].map(tpl.mod).join('');
+    if(!$('#galGrid').querySelector('.item'))
+      $('#galGrid').innerHTML  = ['中央城堡','海上灯塔','山间村落'].map(tpl.gal).join('');
+    if(!$('#teamGrid').querySelector('.item'))
+      $('#teamGrid').innerHTML = ['Steve_01','Alex_02','Creeper_03','Herobrine_04'].map(function(n,i){return tpl.member(n)}).join('');
+  }
+
+  /* ============ 状态应用 ============ */
+  function setEditing(on){
+    editing = on;
+    if(on) finishTypewriter();
+    document.body.classList.toggle('editing', on);
+    $$('[data-edit]').forEach(function(el){ el.setAttribute('contenteditable', on ? 'true' : 'false'); });
+    $$('.field input').forEach(function(i){ i.readOnly = !on; });
+    $('#authBtn').textContent = on ? '🔓 退出编辑' : '🔑';
+  }
+  function syncInputs(){
+    finishTypewriter();                       // 保存/导出前确保打字机已打完
+    if(fx && fx.clearParallax) fx.clearParallax();   // 清掉视差产生的临时位移
+    $$('.field input').forEach(function(i){ i.setAttribute('value', i.value); });
+  }
+
+  /* ============ 初始化 ============ */
+  app.innerHTML = window.MC_APP_HTML || '';
+  initGrids();
+  setEditing(false);
+
+  /* 图片加载状态 */
+  document.addEventListener('error', function(e){
+    var t = e.target;
+    if(t && t.tagName === 'IMG' && t.getAttribute('src')){ var w = t.closest('.img-wrap'); if(w){ w.classList.remove('loading','ld'); w.classList.add('broken'); } }
+  }, true);
+  document.addEventListener('load', function(e){
+    var t = e.target;
+    if(t && t.tagName === 'IMG'){ var w = t.closest('.img-wrap'); if(w){ w.classList.remove('broken','loading'); w.classList.add('ld'); } }
+  }, true);
+
+  /* 粘贴纯文本 */
+  document.addEventListener('paste', function(e){
+    var el = e.target.closest && e.target.closest('[data-edit]');
+    if(!el || !editing) return;
+    e.preventDefault();
+    var txt = (e.clipboardData || window.clipboardData).getData('text/plain');
+    document.execCommand('insertText', false, txt);
+  });
+
+  /* ============ 登录 ============ */
+  var lock = $('#lock'), pwd = $('#pwd');
+  function tryLogin(){
+    if(pwd.value === PASSWORD){
+      lock.classList.add('hide'); pwd.value=''; $('#lockMsg').textContent='';
+      setEditing(true); toast('✓ 已进入编辑模式');
+    }else{
+      $('#lockMsg').textContent = '密码错误，请重试';
+      var c = $('.lock-card'); c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake');
+      pwd.select();
+    }
+  }
+  $('#btnLogin').addEventListener('click', tryLogin);
+  pwd.addEventListener('keydown', function(e){ if(e.key === 'Enter') tryLogin(); });
+  function closeLock(){ lock.classList.add('hide'); pwd.value=''; $('#lockMsg').textContent=''; }
+  $('#btnGuest').addEventListener('click', closeLock);
+  lock.addEventListener('click', function(e){ if(e.target === lock) closeLock(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && !lock.classList.contains('hide')) closeLock(); });
+  $('#authBtn').addEventListener('click', function(){
+    if(editing){ setEditing(false); toast('已退出编辑，当前为只读模式'); }
+    else{ lock.classList.remove('hide'); setTimeout(function(){pwd.focus()},50); }
+  });
+
+  /* ============ 点击事件（事件委托） ============ */
+  document.addEventListener('click', function(e){
+    var lb = $('#lightbox');
+    if(lb.classList.contains('open')){ lb.classList.remove('open'); return; }
+
+    var btn = e.target.closest('[data-act]');
+    if(!btn){
+      var img = e.target.closest('#galGrid .img-wrap img');
+      if(img && !editing && img.getAttribute('src')){
+        $('#lightbox img').src = img.src; lb.classList.add('open');
+      }
+      return;
+    }
+    var act = btn.getAttribute('data-act');
+
+    if(act === 'copy'){
+      e.stopPropagation();
+      var im = btn.closest('.img-wrap').querySelector('img');
+      var src = im ? im.src : '';
+      if(!im || !im.getAttribute('src')){ toast('src 为空，请先填入图片链接', true); return; }
+      copyText(src).then(function(ok){
+        if(!ok){ toast('复制失败，请手动复制', true); return; }
+        toast('✓ 已复制');
+        var old = btn.getAttribute('data-old') || btn.textContent;
+        btn.setAttribute('data-old', old);
+        btn.textContent = '✓ 已复制'; btn.classList.add('ok');
+        clearTimeout(btn._t);
+        btn._t = setTimeout(function(){ btn.textContent = old; btn.classList.remove('ok'); }, 1300);
+      });
+      return;
+    }
+
+    if(!editing) return;  // 以下均为编辑功能，访客无效
+
+    if(act === 'swap'){
+      var im2 = btn.closest('.img-wrap').querySelector('img');
+      var url = prompt('请输入图片链接（图床 URL）：', im2.getAttribute('src') || '');
+      if(url !== null){
+        im2.parentNode.classList.remove('broken');
+        im2.parentNode.classList.remove('ld');
+        im2.setAttribute('src', url.trim());
+        syncImg(im2);
+        toast(url.trim() ? '图片链接已更新' : '已清空图片链接');
+      }
+    }else if(act === 'flip'){
+      btn.closest('.split').classList.toggle('reverse');
+    }else if(act === 'add-mod'){ add('#modGrid', tpl.mod());
+    }else if(act === 'add-gal'){ add('#galGrid', tpl.gal());
+    }else if(act === 'add-member'){ add('#teamGrid', tpl.member());
+    }else if(act === 'del'){
+      if(confirm('确定删除这一项吗？')){ btn.closest('.item').remove(); renderStats(false); }
+    }else if(act === 'save'){
+      syncInputs();
+      try{ localStorage.setItem(KEY, app.innerHTML); toast('✓ 已保存到本浏览器'); }
+      catch(err){ toast('保存失败：存储空间不足或被禁用', true); }
+    }else if(act === 'bg'){
+      var cur = $('#bg').style.getPropertyValue('--bg-image');
+      var m = cur.match(/url\("?(.*?)"?\)/);
+      var u = prompt('请输入背景图链接（留空则恢复默认深色背景）：', m ? m[1] : '');
+      if(u !== null){
+        u = u.trim();
+        if(u) $('#bg').style.setProperty('--bg-image', 'url("'+u.replace(/"/g,'%22')+'")');
+        else $('#bg').style.removeProperty('--bg-image');
+      }
+    }else if(act === 'export'){
+      exportHTML();
+    }else if(act === 'reset'){
+      if(confirm('将清除本浏览器已保存的修改并恢复初始内容，确定吗？')){
+        try{ localStorage.removeItem(KEY); }catch(err){}
+        location.reload();
+      }
+    }
+  });
+
+  function add(sel, html){
+    var g = $(sel); g.insertAdjacentHTML('beforeend', html);
+    setEditing(true);
+    prep(g.lastElementChild, 0);
+    renderStats(false);
+    g.lastElementChild.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+
+  /* ============ 动效与观感 ============ */
+  var reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  function rt(el){ el.setAttribute('data-rt',''); return el; }   // 运行时元素，导出时会剔除
+
+  /* 滚动进度条 + 回到顶部 */
+  var progress = rt(document.createElement('div')); progress.id = 'progress';
+  document.body.appendChild(progress);
+  var toTop = rt(document.createElement('button'));
+  toTop.type = 'button'; toTop.className = 'px-btn to-top'; toTop.textContent = '▲';
+  toTop.setAttribute('aria-label', '回到顶部');
+  document.body.appendChild(toTop);
+  toTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  /* 滚动联动：进度条 / 导航高亮 / 顶栏收缩 */
+  var lastActive = null, ticking = false;
+  function updateScroll(){
+    var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.transform = 'scaleX(' + (h > 0 ? Math.min(1, y / h) : 0) + ')';
+    var hd = $('header.top'); if(hd) hd.classList.toggle('scrolled', y > 30);
+    toTop.classList.toggle('show', y > 500);
+    var secs = $$('main section'), cur = null;
+    secs.forEach(function(s){ if(s.getBoundingClientRect().top <= 170) cur = s.id; });
+    if(h > 0 && y >= h - 4 && secs.length) cur = secs[secs.length-1].id;
+    if(cur !== lastActive){
+      lastActive = cur;
+      var nav = $('nav.menu');
+      $$('nav.menu a').forEach(function(a){
+        var on = a.getAttribute('href') === '#' + cur;
+        a.classList.toggle('active', on);
+        if(on && nav && nav.scrollWidth > nav.clientWidth){
+          nav.scrollTo({left: a.offsetLeft - nav.clientWidth/2 + a.clientWidth/2, behavior:'smooth'});
+        }
+      });
+    }
+  }
+  window.addEventListener('scroll', function(){
+    if(!ticking){ ticking = true; requestAnimationFrame(function(){ ticking = false; updateScroll(); }); }
+  }, {passive:true});
+  window.addEventListener('resize', updateScroll);
+
+  /* 入场动画（滚动到可视区时依次浮现） */
+  var revealIO = ('IntersectionObserver' in window) ? new IntersectionObserver(function(es){
+    es.forEach(function(en){
+      if(en.isIntersecting){ en.target.classList.add('in'); revealIO.unobserve(en.target); }
+    });
+  }, {threshold:.1, rootMargin:'0px 0px -30px 0px'}) : null;
+  function prep(el, delay){
+    el.classList.remove('in'); el.classList.add('reveal');
+    el.style.setProperty('--d', delay + 'ms');
+    if(revealIO) revealIO.observe(el); else el.classList.add('in');
+  }
+  function applyReveal(){
+    $$('.reveal').forEach(function(e){ e.classList.remove('reveal','in'); });  // 清掉已保存内容里的旧状态
+    $$('.hero,.sec-title,.split,footer').forEach(function(e){ prep(e, 0); });
+    $$('.grid').forEach(function(g){ $$('.item', g).forEach(function(it, i){ prep(it, (i % 6) * 70); }); });
+  }
+
+  /* 首页数据统计（自动统计模组/作品/成员数量，带数字滚动） */
+  function renderStats(animate){
+    var hero = $('.hero'); if(!hero) return;
+    var box = $('.stats', hero);
+    if(!box){
+      box = document.createElement('div'); box.className = 'stats';
+      var go = $('.go', hero);
+      if(go) go.insertAdjacentElement('afterend', box); else hero.appendChild(box);
+    }
+    var defs = [['#modGrid','收藏模组'],['#galGrid','展出作品'],['#tl','建造日志','.tl-item'],['#teamGrid','建造成员']];
+    box.innerHTML = defs.map(function(d){
+      var g = $(d[0]), n = g ? g.querySelectorAll(d[2] || '.item').length : 0;
+      return '<div><b data-n="'+n+'">'+(animate && !reduce ? 0 : n)+'</b><span>'+d[1]+'</span></div>';
+    }).join('');
+    if(animate && !reduce){
+      var bs = $$('b', box), t0 = null;
+      (function step(ts){
+        if(!t0) t0 = ts;
+        var p = Math.min(1, (ts - t0) / 900);
+        bs.forEach(function(b){ b.textContent = Math.round(+b.getAttribute('data-n') * p); });
+        if(p < 1) requestAnimationFrame(step);
+      })(performance.now());
+    }
+    if(!$('.scroll-hint', hero)){
+      var h = document.createElement('a');
+      h.className = 'scroll-hint'; h.href = '#map'; h.setAttribute('aria-label','向下浏览'); h.textContent = '▼';
+      hero.appendChild(h);
+    }
+  }
+
+  /* 鼠标聚光灯 + 卡片 3D 倾斜（仅鼠标，编辑模式不倾斜） */
+  document.addEventListener('pointermove', function(e){
+    if(e.pointerType !== 'mouse' || !e.target.closest) return;
+    var card = e.target.closest('.item,.split'); if(!card) return;
+    var r = card.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+    card.style.setProperty('--mx', x + 'px'); card.style.setProperty('--my', y + 'px');
+    if(!editing && card.classList.contains('item')){
+      var rx = (y / r.height - .5) * -7, ry = (x / r.width - .5) * 7;
+      card.style.transform = 'perspective(800px) rotateX('+rx.toFixed(2)+'deg) rotateY('+ry.toFixed(2)+'deg) translateY(-6px)';
+    }
+  }, {passive:true});
+  document.addEventListener('pointerout', function(e){
+    if(!e.target.closest) return;
+    var card = e.target.closest('.item,.split');
+    if(card && !card.contains(e.relatedTarget)){
+      card.style.transform = ''; card.style.removeProperty('--mx'); card.style.removeProperty('--my');
+    }
+  });
+
+  /* ====== 昼夜主题 ====== */
+  var fx = {};
+  function isDay(){ return document.documentElement.getAttribute('data-theme') === 'day'; }
+  function applyTheme(t){
+    document.documentElement.setAttribute('data-theme', t);
+    var b = $('.theme-btn');
+    if(b){
+      b.textContent = t === 'day' ? '🌙' : '☀️';
+      b.title = t === 'day' ? '切换到夜晚' : '切换到白天';
+      b.setAttribute('aria-label', b.title);
+    }
+    if(fx.rebuild) fx.rebuild();
+  }
+  function toggleTheme(){
+    var next = isDay() ? 'night' : 'day';
+    try{ localStorage.setItem('mc_theme', next); }catch(e){}
+    if(reduce){ applyTheme(next); return; }
+    var f = rt(document.createElement('div'));
+    f.className = 'theme-flash ' + next;
+    document.body.appendChild(f);
+    setTimeout(function(){ applyTheme(next); }, 280);
+    setTimeout(function(){ f.remove(); }, 750);
+  }
+  function initTheme(){
+    $$('[data-rt]', app).forEach(function(n){ n.remove(); });   // 清掉旧保存内容里残留的运行时元素
+    var hd = $('header.top'); if(!hd) return;
+    var b = rt(document.createElement('button'));
+    b.type = 'button'; b.className = 'px-btn small gray theme-btn';
+    hd.appendChild(b);
+    b.addEventListener('click', toggleTheme);
+    applyTheme(isDay() ? 'day' : 'night');
+  }
+
+  /* ====== 打字机标语 ====== */
+  var tw = null;
+  function finishTypewriter(){
+    if(!tw || tw.done) return;
+    tw.done = true; clearTimeout(tw.t); tw.el.textContent = tw.full;
+  }
+  function startTypewriter(){
+    var p = $('.hero p[data-edit]'); if(!p) return;
+    p.classList.add('typing');
+    if(reduce || editing) return;
+    tw = {el:p, full:p.textContent, done:false, t:null};
+    p.textContent = '';
+    var i = 0;
+    tw.t = setTimeout(function tick(){
+      if(tw.done) return;
+      i++; p.textContent = tw.full.slice(0, i);
+      if(i >= tw.full.length){ tw.done = true; return; }
+      var ch = tw.full.charAt(i - 1);
+      tw.t = setTimeout(tick, 38 + Math.random() * 42 + (/[，。,.！？]/.test(ch) ? 220 : 0));
+    }, 600);
+  }
+
+  /* ====== 图片：占位 → 加载 → 淡入 ====== */
+  function syncImg(img){
+    var w = img.closest('.img-wrap'); if(!w) return;
+    if(!img.getAttribute('src')){ w.classList.remove('ld','loading','broken'); return; }
+    if(img.complete && img.naturalWidth){ w.classList.add('ld'); w.classList.remove('loading','broken'); }
+    else if(img.complete){ w.classList.remove('loading','ld'); w.classList.add('broken'); }
+    else { w.classList.remove('ld','broken'); w.classList.add('loading'); }
+  }
+
+  /* ====== 建造日志时间线 ====== */
+  var CATS = ['建筑','红石','地形','优化'];
+  var curFilter = 'all';
+  var SAMPLE = [
+    {date:'2026-11-22', stage:'v0.4 灯光与内饰', cat:'优化', title:'主城灯光重做', body:'把主城街道的火把全部换成灯笼与海晶灯，夜晚的整体氛围好了很多。顺手清理了重复的刷怪平台，减少了卡顿。'},
+    {date:'2026-11-15', stage:'v0.3 主体结构', cat:'建筑', title:'中央城堡封顶', body:'城堡的塔楼与城墙全部完成，屋顶用深板岩与石砖拼出了层次，下一步开始做内部大厅。'},
+    {date:'2026-11-08', stage:'v0.2 红石工坊', cat:'红石', title:'自动化农场上线', body:'完成小麦与甘蔗的自动收割线，使用观察者加活塞触发，产物统一送入仓库。'},
+    {date:'2026-10-30', stage:'v0.1 地形铺设', cat:'地形', title:'整平出生点周边地形', body:'划定了主城范围，整平了出生点周围的山地，并挖出了环绕城区的护城河。'}
+  ];
+  function todayStr(){
+    var d = new Date();
+    return d.getFullYear() + '-' + ('0' + (d.getMonth()+1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+  }
+  function logImg(url){
+    return '<div class="img-wrap wide"><img src="'+esc(url||'')+'" alt="日志配图" loading="lazy" referrerpolicy="no-referrer">' +
+      '<button class="copy-btn" data-act="copy" type="button">⧉ 复制链接</button>' +
+      '<button class="swap-btn edit-only" data-act="swap" type="button">✎ 换图</button></div>';
+  }
+  function logTpl(o){
+    return '<article class="tl-item" data-cat="'+esc(o.cat)+'" data-date="'+esc(o.date)+'"><span class="tl-node"></span>' +
+      '<div class="tl-card item glass'+(o.img ? ' has-img' : '')+'">' +
+      '<div class="tl-meta"><time data-edit contenteditable="false">'+esc(o.date)+'</time>' +
+      (o.stage ? '<span class="stage" data-edit contenteditable="false">'+esc(o.stage)+'</span>' : '') +
+      '<button class="cat-chip" data-act="log-cat" data-c="'+esc(o.cat)+'" type="button" title="编辑模式下点击切换分类">'+esc(o.cat)+'</button></div>' +
+      '<h3 data-edit contenteditable="false">'+esc(o.title)+'</h3>' +
+      '<p class="desc" data-edit contenteditable="false">'+esc(o.body)+'</p>' +
+      (o.img ? logImg(o.img) : '') +
+      '<div class="tools edit-only">' +
+      '<button class="px-btn small gray add-img" data-act="log-addimg" type="button">＋ 配图</button>' +
+      '<button class="px-btn small gray rm-img" data-act="log-rmimg" type="button">✕ 移除图片</button>' +
+      '<button class="px-btn small danger" data-act="log-del" type="button">🗑 删除</button></div>' +
+      '</div></article>';
+  }
+  function ensureLog(){
+    if(!$('#log')){
+      var team = $('#team'); if(!team) return;
+      var sec = document.createElement('section'); sec.id = 'log';
+      sec.innerHTML =
+        '<div class="sec-title"><h2><span class="en">DEVLOG</span><span data-edit contenteditable="false">建造日志</span></h2>' +
+        '<button class="px-btn small edit-only" data-act="add-log" type="button">＋ 添加日志</button>' +
+        '<button class="px-btn small gray edit-only" data-act="log-sort" type="button">⇅ 按日期排序</button></div>' +
+        '<div class="tl-filters">' + ['全部'].concat(CATS).map(function(c, i){
+          return '<button class="chip'+(i ? '' : ' active')+'" data-act="filter" data-f="'+(i ? c : 'all')+'" type="button">'+c+'</button>';
+        }).join('') + '</div>' +
+        '<div class="tl" id="tl">' + SAMPLE.map(logTpl).join('') + '</div>';
+      team.parentNode.insertBefore(sec, team);
+    }
+    if(!$('nav.menu a[href="#log"]')){
+      var t = $('nav.menu a[href="#team"]');
+      if(t){ var a = document.createElement('a'); a.href = '#log'; a.textContent = '建造日志'; t.parentNode.insertBefore(a, t); }
+    }
+  }
+  function getLogDate(it){
+    var t = $('time', it), m = t && t.textContent.match(/(\d{4})\D(\d{1,2})\D(\d{1,2})/);
+    return m ? m[1] + '-' + ('0'+m[2]).slice(-2) + '-' + ('0'+m[3]).slice(-2) : (it.getAttribute('data-date') || '');
+  }
+  function sortLog(){
+    var tl = $('#tl'); if(!tl) return;
+    var arr = $$('.tl-item', tl);
+    arr.forEach(function(it){ it.setAttribute('data-date', getLogDate(it)); });
+    arr.map(function(it, i){ return [it, i]; }).sort(function(a, b){
+      var x = a[0].getAttribute('data-date'), y = b[0].getAttribute('data-date');
+      return x < y ? 1 : x > y ? -1 : a[1] - b[1];
+    }).forEach(function(p){ tl.appendChild(p[0]); });
+  }
+  function renderLog(){
+    var tl = $('#tl'); if(!tl) return;
+    var all = $$('.tl-item', tl), n = all.length;
+    all.forEach(function(it, i){
+      var a = n > 1 ? 1 - .72 * (i / (n - 1)) : 1;
+      var a2 = n > 1 ? 1 - .72 * ((i + 1) / (n - 1)) : 1;
+      it.style.setProperty('--a', a.toFixed(2));
+      it.style.setProperty('--a2', Math.max(.28, a2).toFixed(2));
+      it.classList.toggle('first', i === 0);
+      var card = $('.tl-card', it); if(card) card.classList.toggle('has-img', !!$('.img-wrap', card));
+      var cat = $('.cat-chip', it); if(cat) it.setAttribute('data-cat', cat.textContent.trim());
+      it.hidden = !(curFilter === 'all' || it.getAttribute('data-cat') === curFilter);
+    });
+    var vis = all.filter(function(it){ return !it.hidden; });
+    all.forEach(function(it){ it.classList.remove('last'); });
+    if(vis.length) vis[vis.length - 1].classList.add('last');
+    tl.setAttribute('data-empty', vis.length ? '0' : '1');
+    $$('.tl-filters .chip').forEach(function(c){
+      var f = c.getAttribute('data-f');
+      c.classList.toggle('active', f === curFilter);
+      c.setAttribute('data-n', f === 'all' ? n : all.filter(function(it){ return it.getAttribute('data-cat') === f; }).length);
+    });
+  }
+  function replayLog(){
+    var k = 0;
+    $$('.tl-item:not([hidden]) .tl-card').forEach(function(c){
+      c.style.setProperty('--d', (k++ * 70) + 'ms');
+      c.classList.remove('in'); void c.offsetWidth; c.classList.add('in');
+    });
+  }
+  /* 节点依次点亮：滚动到视口时，竖线从上往下生长，节点逐个弹出 */
+  var litIO = ('IntersectionObserver' in window) ? new IntersectionObserver(function(es){
+    var k = 0;
+    es.filter(function(en){ return en.isIntersecting; })
+      .sort(function(a, b){ return a.boundingClientRect.top - b.boundingClientRect.top; })
+      .forEach(function(en){
+        en.target.style.setProperty('--ld', (k++ * 260) + 'ms');
+        en.target.classList.add('lit'); litIO.unobserve(en.target);
+      });
+  }, {threshold:.15, rootMargin:'0px 0px -8% 0px'}) : null;
+  function observeOne(it){ it.classList.remove('lit'); if(litIO) litIO.observe(it); else it.classList.add('lit'); }
+  function observeLog(){ $$('.tl-item').forEach(observeOne); }
+
+  /* 表单 */
+  var modal = $('#logModal');
+  function openLogForm(){
+    $('#lfDate').value = todayStr(); $('#lfStage').value = ''; $('#lfCat').value = CATS[0];
+    $('#lfTitle').value = ''; $('#lfBody').value = ''; $('#lfImg').value = ''; $('#lfMsg').textContent = '';
+    modal.classList.add('open');
+    setTimeout(function(){ $('#lfTitle').focus(); }, 60);
+  }
+  function closeLogForm(){ modal.classList.remove('open'); }
+  $('#lfCancel').addEventListener('click', closeLogForm);
+  modal.addEventListener('click', function(e){ if(e.target === modal) closeLogForm(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && modal.classList.contains('open')) closeLogForm(); });
+  $('#logFormEl').addEventListener('submit', function(e){
+    e.preventDefault();
+    if(!editing){ closeLogForm(); return; }
+    var title = $('#lfTitle').value.trim();
+    if(!title){ $('#lfMsg').textContent = '请填写标题'; $('#lfTitle').focus(); return; }
+    var o = {
+      date: $('#lfDate').value || todayStr(), stage: $('#lfStage').value.trim(), cat: $('#lfCat').value,
+      title: title, body: $('#lfBody').value.trim() || '（暂无正文）', img: $('#lfImg').value.trim()
+    };
+    var tl = $('#tl');
+    if(curFilter !== 'all' && curFilter !== o.cat) curFilter = 'all';
+    tl.insertAdjacentHTML('afterbegin', logTpl(o));
+    var it = tl.firstElementChild;
+    var imgEl = $('img', it); if(imgEl) syncImg(imgEl);
+    sortLog(); setEditing(true); renderLog();
+    prep($('.tl-card', it), 0); observeOne(it);
+    renderStats(false); closeLogForm(); toast('✓ 日志已添加');
+    it.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+
+  /* 点击：筛选（所有人）+ 日志编辑（仅编辑模式） */
+  document.addEventListener('click', function(e){
+    if(!e.target.closest) return;
+    var b = e.target.closest('[data-act]');
+    if(!b){
+      var im = e.target.closest('.tl-card .img-wrap img');
+      if(im && !editing && im.getAttribute('src')){ $('#lightbox img').src = im.src; $('#lightbox').classList.add('open'); }
+      return;
+    }
+    var act = b.getAttribute('data-act');
+    if(act === 'filter'){ curFilter = b.getAttribute('data-f'); renderLog(); replayLog(); return; }
+    if(!editing) return;
+    var it = b.closest('.tl-item');
+    if(act === 'add-log'){ openLogForm(); }
+    else if(act === 'log-sort'){ sortLog(); renderLog(); toast('已按日期排序'); }
+    else if(act === 'log-cat'){
+      var i = (CATS.indexOf(b.textContent.trim()) + 1) % CATS.length;
+      b.textContent = CATS[i]; b.setAttribute('data-c', CATS[i]); renderLog();
+    }
+    else if(act === 'log-del'){
+      if(confirm('确定删除这条日志吗？')){ it.remove(); renderLog(); renderStats(false); }
+    }
+    else if(act === 'log-addimg'){
+      var url = prompt('请输入图片链接（图床 URL，可先留空稍后再填）：', '');
+      if(url === null) return;
+      var card = $('.tl-card', it);
+      $('.tools', card).insertAdjacentHTML('beforebegin', logImg(url.trim()));
+      var im2 = $('img', card); if(im2) syncImg(im2);
+      renderLog();
+    }
+    else if(act === 'log-rmimg'){
+      if(confirm('移除这张图片？')){ var w = $('.img-wrap', it); if(w) w.remove(); renderLog(); }
+    }
+  });
+
+  /* ====== 背景特效画布：星月/日云 + 光点 + 风线 + 夜晚天际线（含视差） ====== */
+  function startFX(){
+    var cv = rt(document.createElement('canvas'));
+    cv.style.cssText = 'position:fixed;left:0;top:0;width:100%;height:100%;z-index:-1;pointer-events:none';
+    document.body.appendChild(cv);
+    var ctx = cv.getContext('2d'); if(!ctx) return;
+    var W = 0, H = 0, motes = [], stars = [], clouds = [], streaks = [], city = [], wins = [];
+    var DAYC = ['#ffffff','#ffe9a8','#d9f5c8','#ffffff'], NIGHTC = ['#9dff9d','#ffd24a','#bfe3f7','#ffffff'];
+    var SHAPE = [[2,-1,2,1],[1,0,3,1],[0,1,5,1]];
+    var sy = 0, applied = NaN, spawn = 20, last = 0, heroEls = [];
+    [['.hero .logo.big',.30],['.hero h2',.18],['.hero p',.12],['.hero .stats',.07]].forEach(function(h){
+      var el = $(h[0]); if(el) heroEls.push([el, h[1]]);
+    });
+    function rnd(a, b){ return a + Math.random() * (b - a); }
+    function mod(a, n){ return ((a % n) + n) % n; }
+
+    function buildCity(){
+      city = []; wins = [];
+      var x = -8;
+      while(x < W){
+        var w = (2 + ((Math.random() * 3) | 0)) * 16, h = (3 + ((Math.random() * 6) | 0)) * 16;
+        city.push({x:x, w:w, h:h});
+        for(var wy = 18; wy < h - 10; wy += 18) for(var wx = 8; wx < w - 12; wx += 16) wins.push({x:x + wx, y:wy - h, on:Math.random() < .5});
+        x += w + ((Math.random() * 3) | 0) * 8;
+      }
+    }
+    /* 粒子总数 ≤ 60：夜晚桌面 24 光点 + 32 星星；白天 36 光点；手机更少 */
+    function layout(force){
+      var nw = window.innerWidth, nh = window.innerHeight;
+      if(!force && nw === W && Math.abs(nh - H) < 120) return;
+      W = cv.width = nw; H = cv.height = nh; ctx.imageSmoothingEnabled = false;
+      var small = W < 760, day = isDay(), i;
+      var nm = day ? (small ? 16 : 36) : (small ? 12 : 24), ns = day ? 0 : (small ? 16 : 32);
+      motes = []; for(i = 0; i < nm; i++) motes.push({x:rnd(0,W), y:rnd(0,H+16), s:Math.random() < .7 ? 2 : 4, vy:rnd(.12,.45), ph:rnd(0,6.28), sp:rnd(.4,1.2), ci:(Math.random()*4)|0, a:rnd(.4,.9), z:rnd(.4,1)});
+      stars = []; for(i = 0; i < ns; i++) stars.push({x:rnd(0,W), y:rnd(0,H), s:Math.random() < .8 ? 2 : 4, ph:rnd(0,6.28), z:rnd(.2,1)});
+      clouds = []; for(i = 0; i < (day ? 5 : 4); i++) clouds.push({x:rnd(0,W), y:rnd(30,H*.5), u:((Math.random()*3)|0)*4 + 8, v:rnd(.08,.22)});
+      buildCity();
+      if(reduce) draw(0, 0);
+    }
+
+    function draw(ts, dt){
+      var day = isDay(), i, u, cx, cy;
+      ctx.clearRect(0, 0, W, H); ctx.globalAlpha = 1;
+      if(day){
+        cx = Math.round(W * .86); cy = Math.round(84 - sy * .08); u = 10;
+        ctx.fillStyle = 'rgba(255,236,160,.2)'; ctx.fillRect(cx - 5*u, cy - 5*u, 11*u, 11*u);
+        ctx.fillStyle = 'rgba(255,236,160,.22)'; ctx.fillRect(cx - 4*u, cy - 4*u, 9*u, 9*u);
+        ctx.fillStyle = '#ffd24a';
+        [[-1,-2,3,1],[-2,-1,5,3],[-1,2,3,1]].forEach(function(r){ ctx.fillRect(cx + r[0]*u, cy + r[1]*u, r[2]*u, r[3]*u); });
+        ctx.fillStyle = '#fff3b0'; ctx.fillRect(cx - u, cy - u, u, u);
+        ctx.globalAlpha = .6 + .4 * Math.sin(ts / 700); ctx.fillStyle = '#ffe27a';
+        [[0,-4],[0,4],[-4,0],[4,0],[-3,-3],[3,-3],[-3,3],[3,3]].forEach(function(r){ ctx.fillRect(cx + r[0]*u, cy + r[1]*u, u, u); });
+        ctx.globalAlpha = 1;
+      }else{
+        ctx.fillStyle = '#fff';
+        for(i = 0; i < stars.length; i++){
+          var s = stars[i];
+          ctx.globalAlpha = .3 + .7 * Math.abs(Math.sin(ts / 900 + s.ph));
+          ctx.fillRect(Math.round(s.x), Math.round(mod(s.y - sy * .08 * s.z, H)), s.s, s.s);
+        }
+        ctx.globalAlpha = .85; ctx.fillStyle = '#f4f1d0';
+        cx = Math.round(W * .84); cy = Math.round(90 - sy * .06); u = 8;
+        [[2,0,2],[1,1,2],[0,2,2],[0,3,2],[1,4,2],[2,5,2]].forEach(function(r){ ctx.fillRect(cx + r[0]*u, cy + r[1]*u, r[2]*u, u); });
+        ctx.globalAlpha = 1;
+      }
+      /* 云（视差：随滚动缓慢上移） */
+      ctx.fillStyle = day ? 'rgba(255,255,255,.78)' : 'rgba(255,255,255,.06)';
+      clouds.forEach(function(c){
+        c.x += c.v * dt; if(c.x > W + c.u * 6) c.x = -c.u * 6;
+        var y = mod(c.y - sy * .12, H * .6) + 20;
+        SHAPE.forEach(function(r){ ctx.fillRect(Math.round(c.x + r[0]*c.u), Math.round(y + r[1]*c.u), r[2]*c.u, r[3]*c.u); });
+      });
+      /* 夜晚：天际线 + 亮灯的方块窗户 */
+      if(!day){
+        ctx.fillStyle = 'rgba(8,16,32,.88)';
+        for(i = 0; i < city.length; i++) ctx.fillRect(city[i].x, H - city[i].h, city[i].w, city[i].h);
+        if(dt > 0 && wins.length && Math.random() < .05){ var fw = wins[(Math.random() * wins.length) | 0]; fw.on = !fw.on; }
+        ctx.globalAlpha = .85; ctx.fillStyle = '#ffd24a';
+        for(i = 0; i < wins.length; i++) if(wins[i].on) ctx.fillRect(wins[i].x, H + wins[i].y, 6, 8);
+        ctx.globalAlpha = 1;
+      }
+      /* 光点（视差：每个粒子有自己的深度） */
+      var pal = day ? DAYC : NIGHTC;
+      motes.forEach(function(m){
+        m.y -= m.vy * dt; m.x += Math.sin(ts / 1000 * m.sp + m.ph) * .35 * dt;
+        ctx.globalAlpha = m.a * (.6 + .4 * Math.sin(ts / 600 + m.ph));
+        ctx.fillStyle = pal[m.ci % pal.length];
+        ctx.fillRect(Math.round(mod(m.x, W)), Math.round(mod(m.y - sy * .25 * m.z, H + 16) - 8), m.s, m.s);
+      });
+      ctx.globalAlpha = 1;
+      /* 南风风线 */
+      if(dt > 0){
+        spawn -= dt;
+        if(spawn <= 0 && streaks.length < 4){ streaks.push({x:-160, y:rnd(40, H - 40), len:rnd(60,140), v:rnd(4,7)}); spawn = rnd(40,110); }
+      }
+      ctx.fillStyle = day ? 'rgba(255,255,255,.55)' : 'rgba(232,246,255,.22)';
+      for(i = streaks.length - 1; i >= 0; i--){
+        var st = streaks[i]; st.x += st.v * dt;
+        for(var k = 0; k < st.len; k += 10) ctx.fillRect(Math.round(st.x + k), Math.round(st.y - k * .06), 6, 2);
+        if(st.x > W) streaks.splice(i, 1);
+      }
+    }
+
+    fx.rebuild = function(){ layout(true); };
+    fx.clearParallax = function(){ heroEls.forEach(function(p){ p[0].style.translate = ''; }); applied = NaN; };
+    window.addEventListener('resize', function(){ layout(false); });
+    layout(true);
+    if(reduce) return;          // 减少动态效果：只画静态一帧
+
+    function applyHero(){
+      var s = Math.min(sy, 900);
+      heroEls.forEach(function(p){ p[0].style.translate = '0 ' + (s * p[1]).toFixed(1) + 'px'; });
+    }
+    function frame(ts){
+      var dt = Math.min(50, ts - last) / 16.67; last = ts;
+      var ty = window.pageYOffset || 0;
+      sy += (ty - sy) * Math.min(1, .12 * dt);
+      if(Math.abs(sy - applied) > .2){ applied = sy; applyHero(); }
+      draw(ts, dt);
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  /* ====== 初始化 ====== */
+  $$('[style*="translate"]', app).forEach(function(n){ n.style.translate = ''; });
+  ensureLog();
+  $$('.img-wrap img').forEach(syncImg);
+  applyReveal();
+  $$('.tl-card').forEach(function(c, i){ prep(c, (i % 5) * 80); });
+  sortLog(); renderLog(); observeLog();
+  renderStats(true);
+  updateScroll();
+  initTheme();
+  startTypewriter();
+  startFX();
+
+  /* ============ 导出 ============ */
+  function exportHTML(){
+    syncInputs();
+    var clone = document.documentElement.cloneNode(true);
+    $$('[data-rt]', clone).forEach(function(n){ n.remove(); });   // 去掉运行时生成的特效元素
+    clone.removeAttribute('data-theme');                          // 主题由访客本地偏好/时间决定
+    $$('[style*="translate"]', clone).forEach(function(n){ n.style.translate = ''; });
+    $$('.item,.split', clone).forEach(function(n){ n.style.transform=''; n.style.removeProperty('--mx'); n.style.removeProperty('--my'); });
+    $$('[contenteditable]', clone).forEach(function(el){ el.setAttribute('contenteditable','false'); });
+    $$('.field input', clone).forEach(function(i){ i.setAttribute('readonly',''); });
+    var body = clone.querySelector('body'); body.classList.remove('editing');
+    var l = clone.querySelector('#lock'); if(l) l.classList.add('hide');
+    var lb = clone.querySelector('#lightbox'); if(lb) lb.classList.remove('open');
+    var t = clone.querySelector('#toast'); if(t){ t.className=''; t.textContent=''; }
+    var a = clone.querySelector('#authBtn'); if(a) a.textContent = '🔑';
+    var html = '<!DOCTYPE html>\n' + clone.outerHTML;
+    var blob = new Blob([html], {type:'text/html;charset=utf-8'});
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob); link.download = 'index.html';
+    document.body.appendChild(link); link.click(); link.remove();
+    setTimeout(function(){ URL.revokeObjectURL(link.href); }, 2000);
+    toast('✓ 已导出 HTML 文件');
+  }
+})();
+</script>
+</body></html>
