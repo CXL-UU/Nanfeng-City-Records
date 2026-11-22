@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN" class="js"><head>
+<html lang="zh-CN">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>
-/* 首屏前先确定主题，避免闪烁：优先读上次选择，否则 6:00-18:00 白天、其余夜晚 */
+/* 首屏前先确定主题，避免闪烁 */
 (function(){
   var d = document.documentElement; d.classList.add('js');
   var t = null;
@@ -14,41 +15,38 @@
 </script>
 <title>南风市 · 我的世界建筑作品与收藏集</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
-<body class="">
-<!-- 南风市 Logo：像素风“南风掠过城市天际线”，原创绘制 -->
+<body>
+
+<!-- 南风市 Logo -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="nanfeng-logo" viewBox="0 0 16 16" shape-rendering="crispEdges">
-    <rect width="16" height="16" fill="#12324a"></rect>
-    <rect y="9" width="16" height="7" fill="#17405c"></rect>
-    <!-- 太阳 -->
-    <rect x="12" y="1" width="3" height="3" fill="#ffd24a"></rect>
-    <rect x="12" y="1" width="1" height="1" fill="#fff3b0"></rect>
-    <!-- 南风：向上卷曲的风线 -->
-    <rect x="1" y="2" width="6" height="1" fill="#e8f6ff"></rect>
-    <rect x="7" y="1" width="2" height="1" fill="#e8f6ff"></rect>
-    <rect x="9" y="2" width="1" height="1" fill="#e8f6ff"></rect>
-    <rect x="0" y="4" width="5" height="1" fill="#bfe3f7"></rect>
-    <rect x="5" y="3" width="2" height="1" fill="#bfe3f7"></rect>
-    <rect x="7" y="4" width="1" height="1" fill="#bfe3f7"></rect>
-    <!-- 天际线 -->
-    <rect x="1" y="10" width="3" height="6" fill="#5dd35d"></rect>
-    <rect x="5" y="7" width="4" height="9" fill="#3aa43a"></rect>
-    <rect x="6" y="6" width="2" height="1" fill="#ffd24a"></rect>
-    <rect x="10" y="9" width="4" height="7" fill="#2f8f2f"></rect>
-    <!-- 窗户 -->
-    <rect x="2" y="12" width="1" height="1" fill="#ffd24a"></rect>
-    <rect x="6" y="9" width="1" height="1" fill="#ffd24a"></rect>
-    <rect x="7" y="11" width="1" height="1" fill="#ffd24a"></rect>
-    <rect x="6" y="13" width="1" height="1" fill="#ffd24a"></rect>
-    <rect x="11" y="11" width="1" height="1" fill="#ffd24a"></rect>
-    <rect x="12" y="13" width="1" height="1" fill="#ffd24a"></rect>
+    <rect width="16" height="16" fill="#12324a"/>
+    <rect y="9" width="16" height="7" fill="#17405c"/>
+    <rect x="12" y="1" width="3" height="3" fill="#ffd24a"/>
+    <rect x="12" y="1" width="1" height="1" fill="#fff3b0"/>
+    <rect x="1" y="2" width="6" height="1" fill="#e8f6ff"/>
+    <rect x="7" y="1" width="2" height="1" fill="#e8f6ff"/>
+    <rect x="9" y="2" width="1" height="1" fill="#e8f6ff"/>
+    <rect x="0" y="4" width="5" height="1" fill="#bfe3f7"/>
+    <rect x="5" y="3" width="2" height="1" fill="#bfe3f7"/>
+    <rect x="7" y="4" width="1" height="1" fill="#bfe3f7"/>
+    <rect x="1" y="10" width="3" height="6" fill="#5dd35d"/>
+    <rect x="5" y="7" width="4" height="9" fill="#3aa43a"/>
+    <rect x="6" y="6" width="2" height="1" fill="#ffd24a"/>
+    <rect x="10" y="9" width="4" height="7" fill="#2f8f2f"/>
+    <rect x="2" y="12" width="1" height="1" fill="#ffd24a"/>
+    <rect x="6" y="9" width="1" height="1" fill="#ffd24a"/>
+    <rect x="7" y="11" width="1" height="1" fill="#ffd24a"/>
+    <rect x="6" y="13" width="1" height="1" fill="#ffd24a"/>
+    <rect x="11" y="11" width="1" height="1" fill="#ffd24a"/>
+    <rect x="12" y="13" width="1" height="1" fill="#ffd24a"/>
   </symbol>
 </svg>
 
-<!-- 添加建造日志表单（仅编辑模式可打开） -->
+<!-- 添加建造日志表单 -->
 <div id="logModal" class="modal">
   <form class="lock-card form-card glass" id="logFormEl" autocomplete="off">
     <h2>＋ 添加建造日志</h2>
@@ -71,7 +69,7 @@
 <!-- 密码锁 -->
 <div id="lock" class="hide">
   <div class="lock-card glass">
-    <svg class="logo big" aria-hidden="true"><use href="#nanfeng-logo"></use></svg>
+    <svg class="logo big" aria-hidden="true"><use href="#nanfeng-logo"/></svg>
     <h2>🔒 南风市 · 编辑权限验证</h2>
     <p>输入密码进入编辑模式。</p>
     <input type="password" id="pwd" placeholder="请输入密码" autocomplete="off">
@@ -83,30 +81,156 @@
   </div>
 </div>
 
-<div id="toast" class=""></div>
+<div id="toast"></div>
 <div id="lightbox"><img src="" alt=""></div>
 
-<!-- 整个站点（保存/导出的范围） -->
-<div id="app"></div>
-<!-- 编辑工具条 -->
+<div id="app">
+  <div class="bg" id="bg"></div>
+
+  <header class="top glass">
+    <div class="brand">
+      <svg class="logo" aria-label="南风市 Logo" role="img"><use href="#nanfeng-logo"/></svg>
+      <div class="name">
+        <h1 data-bind="meta.siteTitle" data-edit contenteditable="false">南风市</h1>
+        <span class="sub" data-bind="meta.siteSub" data-edit contenteditable="false">NANFENG CITY · 建筑收藏集</span>
+      </div>
+    </div>
+    <nav class="menu">
+      <a href="#home">主页</a>
+      <a href="#map">区域规划</a>
+      <a href="#story">背景故事</a>
+      <a href="#mods">使用模组</a>
+      <a href="#gallery">作品展览</a>
+      <a href="#log">建造日志</a>
+      <a href="#team">建造人员</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home">
+      <div class="hero glass">
+        <svg class="logo big" aria-hidden="true"><use href="#nanfeng-logo"/></svg>
+        <div class="pixel-tag" data-bind="meta.heroTag" data-edit contenteditable="false">MINECRAFT BUILD SHOWCASE</div>
+        <h2 data-bind="meta.heroTitle" data-edit contenteditable="false">欢迎来到南风市</h2>
+        <p data-bind="meta.heroDesc" data-edit contenteditable="false">这里收藏着服务器里最用心的建筑作品、世界观设定与团队故事。向下滚动，开始你的参观之旅。</p>
+        <div class="go">
+          <a class="px-btn" href="#gallery">▶ 浏览作品</a>
+          <a class="px-btn gray" href="#map">⌖ 查看地图</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="map">
+      <div class="sec-title"><h2><span class="en"></span><span data-edit contenteditable="false"></span></h2></div>
+      <div class="split glass">
+        <div class="media">
+          <div class="img-wrap">
+            <img src="" alt="区域规划地图" loading="lazy" referrerpolicy="no-referrer">
+            <button class="copy-btn" data-act="copy" type="button">⧉ 复制链接</button>
+            <button class="swap-btn edit-only" data-act="swap" type="button">✎ 换图</button>
+          </div>
+        </div>
+        <div class="text">
+          <div data-edit contenteditable="false"></div>
+          <div class="tools edit-only"><button class="px-btn small gray" data-act="flip" type="button">⇄ 切换图文左右</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="story">
+      <div class="sec-title"><h2><span class="en"></span><span data-edit contenteditable="false"></span></h2></div>
+      <div class="split glass reverse">
+        <div class="media">
+          <div class="img-wrap">
+            <img src="" alt="背景故事插图" loading="lazy" referrerpolicy="no-referrer">
+            <button class="copy-btn" data-act="copy" type="button">⧉ 复制链接</button>
+            <button class="swap-btn edit-only" data-act="swap" type="button">✎ 换图</button>
+          </div>
+        </div>
+        <div class="text">
+          <div data-edit contenteditable="false"></div>
+          <div class="tools edit-only"><button class="px-btn small gray" data-act="flip" type="button">⇄ 切换图文左右</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="mods">
+      <div class="sec-title">
+        <h2><span class="en" data-bind="sectionTitles.mods.en"></span><span data-bind="sectionTitles.mods.title" data-edit contenteditable="false"></span></h2>
+        <button class="px-btn small edit-only" data-act="add-mod" type="button">＋ 添加模组</button>
+      </div>
+      <div class="grid" id="modGrid"></div>
+    </section>
+
+    <section id="gallery">
+      <div class="sec-title">
+        <h2><span class="en" data-bind="sectionTitles.gallery.en"></span><span data-bind="sectionTitles.gallery.title" data-edit contenteditable="false"></span></h2>
+        <button class="px-btn small edit-only" data-act="add-gal" type="button">＋ 添加作品</button>
+      </div>
+      <div class="grid" id="galGrid"></div>
+    </section>
+
+    <section id="log">
+      <div class="sec-title">
+        <h2><span class="en" data-bind="sectionTitles.log.en"></span><span data-bind="sectionTitles.log.title" data-edit contenteditable="false"></span></h2>
+        <button class="px-btn small edit-only" data-act="add-log" type="button">＋ 添加日志</button>
+        <button class="px-btn small gray edit-only" data-act="log-sort" type="button">⇅ 按日期排序</button>
+      </div>
+      <div class="tl-filters">
+        <button class="chip active" data-act="filter" data-f="all" type="button">全部</button>
+        <button class="chip" data-act="filter" data-f="建筑" type="button">建筑</button>
+        <button class="chip" data-act="filter" data-f="红石" type="button">红石</button>
+        <button class="chip" data-act="filter" data-f="地形" type="button">地形</button>
+        <button class="chip" data-act="filter" data-f="优化" type="button">优化</button>
+      </div>
+      <div class="tl" id="tl"></div>
+    </section>
+
+    <section id="team" class="team">
+      <div class="sec-title">
+        <h2><span class="en" data-bind="sectionTitles.team.en"></span><span data-bind="sectionTitles.team.title" data-edit contenteditable="false"></span></h2>
+        <button class="px-btn small edit-only" data-act="add-member" type="button">＋ 添加成员</button>
+      </div>
+      <div class="grid" id="teamGrid"></div>
+    </section>
+  </main>
+
+  <footer data-bind="meta.footer" data-edit contenteditable="false">© 2026 南风市建筑收藏集 · Not an official Minecraft product.</footer>
+</div>
+
 <div id="toolbar" class="glass edit-only">
-  <button class="px-btn small" data-act="save" type="button">💾 保存</button>
+  <button class="px-btn small" data-act="save" type="button">💾 保存草稿</button>
+  <button class="px-btn small" data-act="export-js" type="button">⬇ 导出 data.js</button>
   <button class="px-btn small gray" data-act="bg" type="button">🖼 设置背景图</button>
-  <button class="px-btn small gray" data-act="export" type="button">⬇ 导出HTML</button>
   <button class="px-btn small danger" data-act="reset" type="button">↺ 重置</button>
 </div>
 <button id="authBtn" class="px-btn small gray" type="button" title="编辑登录" aria-label="编辑登录">🔑</button>
+
 <script src="data.js"></script>
 <script>
 (function(){
   'use strict';
   /* ============ 配置 ============ */
-  var PASSWORD = 'mc2026';            // 修改密码请改这里
-  var KEY = 'mc_showcase_v2';
+  var PASSWORD = 'mc2026';
+  var DRAFT_KEY = 'mc_draft_v3';
 
   var $ = function(s,r){return (r||document).querySelector(s)};
   var $$ = function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
   var app = $('#app'), editing = false;
+
+  /* ============ 数据层 ============ */
+  var fileData = window.MC_DATA || {
+    meta:{}, sections:{}, sectionTitles:{}, mods:[], gallery:[], team:[], logs:[]
+  };
+  var currentData;
+
+  function deepClone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  function loadInitialData(){
+    // 内容永远以 data.js 为准，本地草稿不再静默覆盖，保证所有人看到同一份内容
+    return deepClone(fileData);
+  }
+  currentData = loadInitialData();
 
   /* ============ 工具 ============ */
   var toastTimer;
@@ -115,7 +239,7 @@
     t.textContent = msg;
     t.className = 'show' + (err ? ' err' : '');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function(){ t.className = ''; }, 1800);
+    toastTimer = setTimeout(function(){ t.className = ''; }, 2000);
   }
   function copyText(text){
     if(navigator.clipboard && window.isSecureContext){
@@ -131,85 +255,278 @@
       ta.remove(); return ok;
     }
   }
-  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function esc(s){return String(s == null ? '' : s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function textOf(el){
+    if(!el) return '';
+    var v = (el.innerText != null ? el.innerText : el.textContent);
+    return v.replace(/^\s+|\s+$/g, '');
+  }
+  function getPath(obj, path){
+    var parts = path.split('.'), o = obj;
+    for(var i=0;i<parts.length;i++){ if(o == null) return undefined; o = o[parts[i]]; }
+    return o;
+  }
+  function setPath(obj, path, v){
+    var parts = path.split('.'), o = obj;
+    for(var i=0;i<parts.length-1;i++){
+      if(o[parts[i]] == null || typeof o[parts[i]] !== 'object') o[parts[i]] = {};
+      o = o[parts[i]];
+    }
+    o[parts[parts.length-1]] = v;
+  }
+  function rt(el){ el.setAttribute('data-rt',''); return el; }
+  function imgSrcOf(el){
+    var im = el ? $('.img-wrap img', el) : null;
+    return im ? (im.getAttribute('src') || '') : '';
+  }
 
   /* ============ 模板 ============ */
-  function imgWrap(cls, alt){
-    return '<div class="img-wrap '+(cls||'')+'">' +
-      '<img src="" alt="'+esc(alt||'')+'" loading="lazy" referrerpolicy="no-referrer">' +
+  function imgWrapHTML(cls, alt, src){
+    return '<div class="img-wrap ' + (cls||'') + '">' +
+      '<img src="' + esc(src || '') + '" alt="' + esc(alt||'') + '" loading="lazy" referrerpolicy="no-referrer">' +
       '<button class="copy-btn" data-act="copy" type="button">⧉ 复制链接</button>' +
-      '<button class="swap-btn edit-only" data-act="swap" type="button">✎ 换图</button></div>';
+      '<button class="swap-btn edit-only" data-act="swap" type="button">✎ 换图</button>' +
+    '</div>';
   }
-  var delBtn = '<button class="px-btn small danger edit-only" data-act="del" type="button">🗑 删除</button>';
-  var tpl = {
-    mod: function(n){
-      return '<article class="item glass mod-text">' +
-        '<h3 data-edit contenteditable="false">'+esc(n||'模组名称')+'</h3>' +
-        '<label class="field"><span>组件码</span><input class="code" placeholder="待填写" readonly></label>' +
-        '<label class="field price"><span>售价</span><input class="price-in" placeholder="¥ 0.00" readonly></label>' +
-        delBtn + '</article>';
-    },
-    gal: function(n){
-      return '<figure class="item glass">' + imgWrap('','建筑截图') +
-        '<h3 data-edit contenteditable="false">'+esc(n||'建筑名称')+'</h3>' +
-        '<p class="desc" data-edit contenteditable="false">在这里写下建筑的介绍：风格、建造时长、使用的材料与亮点。</p>' +
-        delBtn + '</figure>';
-    },
-    member: function(n){
-      return '<article class="item glass">' + imgWrap('sq','成员头像') +
-        '<h3 data-edit contenteditable="false">'+esc(n||'Steve_ID')+'</h3>' +
-        '<div class="role" data-edit contenteditable="false">分工：主建筑师</div>' +
-        delBtn + '</article>';
+  function logImgHTML(src){
+    return '<div class="img-wrap wide">' +
+      '<img src="' + esc(src || '') + '" alt="日志配图" loading="lazy" referrerpolicy="no-referrer">' +
+      '<button class="copy-btn" data-act="copy" type="button">⧉ 复制链接</button>' +
+      '<button class="swap-btn edit-only" data-act="swap" type="button">✎ 换图</button>' +
+    '</div>';
+  }
+  function tplMod(m){
+    m = m || {};
+    return '<article class="item glass" data-type="mod">' +
+      '<h3 data-edit contenteditable="false" data-f="name">' + esc(m.name || '模组名称') + '</h3>' +
+      '<p class="desc" data-edit contenteditable="false" data-f="desc">' + esc(m.desc || '') + '</p>' +
+      '<label class="field"><span>组件码</span><input class="code" data-f="code" placeholder="待填写" readonly value="' + esc(m.code || '') + '"></label>' +
+      '<label class="field price"><span>售价</span><input class="price-in" data-f="price" placeholder="¥ 0.00" readonly value="' + esc(m.price || '') + '"></label>' +
+      '<button class="px-btn small danger edit-only" data-act="del" type="button">🗑 删除</button>' +
+    '</article>';
+  }
+  function tplGal(g){
+    g = g || {};
+    return '<figure class="item glass" data-type="gal">' +
+      imgWrapHTML('', '建筑截图', g.img) +
+      '<h3 data-edit contenteditable="false" data-f="name">' + esc(g.name || '建筑名称') + '</h3>' +
+      '<p class="desc" data-edit contenteditable="false" data-f="desc">' + esc(g.desc || '') + '</p>' +
+      '<button class="px-btn small danger edit-only" data-act="del" type="button">🗑 删除</button>' +
+    '</figure>';
+  }
+  function tplMember(m){
+    m = m || {};
+    return '<article class="item glass" data-type="member">' +
+      imgWrapHTML('sq', '成员头像', m.img) +
+      '<h3 data-edit contenteditable="false" data-f="name">' + esc(m.name || 'Steve_ID') + '</h3>' +
+      '<div class="role" data-edit contenteditable="false" data-f="role">' + esc(m.role || '分工：主建筑师') + '</div>' +
+      '<button class="px-btn small danger edit-only" data-act="del" type="button">🗑 删除</button>' +
+    '</article>';
+  }
+  function tplLog(o){
+    o = o || {};
+    return '<article class="tl-item" data-cat="' + esc(o.cat || '建筑') + '" data-date="' + esc(o.date || '') + '"><span class="tl-node"></span>' +
+      '<div class="tl-card item glass' + (o.img ? ' has-img' : '') + '">' +
+        '<div class="tl-meta">' +
+          '<time data-edit contenteditable="false">' + esc(o.date || '') + '</time>' +
+          (o.stage ? '<span class="stage" data-edit contenteditable="false">' + esc(o.stage) + '</span>' : '') +
+          '<button class="cat-chip" data-act="log-cat" data-c="' + esc(o.cat || '建筑') + '" type="button" title="编辑模式下点击切换分类">' + esc(o.cat || '建筑') + '</button>' +
+        '</div>' +
+        '<h3 data-edit contenteditable="false">' + esc(o.title || '') + '</h3>' +
+        '<p class="desc" data-edit contenteditable="false">' + esc(o.body || '') + '</p>' +
+        (o.img ? logImgHTML(o.img) : '') +
+        '<div class="tools edit-only">' +
+          '<button class="px-btn small gray add-img" data-act="log-addimg" type="button">＋ 配图</button>' +
+          '<button class="px-btn small gray rm-img" data-act="log-rmimg" type="button">✕ 移除图片</button>' +
+          '<button class="px-btn small danger" data-act="log-del" type="button">🗑 删除</button>' +
+        '</div>' +
+      '</div></article>';
+  }
+
+  /* ============ 渲染（数据 → DOM） ============ */
+  function renderAll(){
+    var d = currentData;
+
+    $$('[data-bind]').forEach(function(el){
+      var v = getPath(d, el.getAttribute('data-bind'));
+      if(v != null) el.textContent = v;
+    });
+
+    applyBg(d.meta && d.meta.bgImage);
+
+    renderSplit('map', d.sections && d.sections.map);
+    renderSplit('story', d.sections && d.sections.story);
+
+    $('#modGrid').innerHTML  = (d.mods || []).map(tplMod).join('');
+    $('#galGrid').innerHTML  = (d.gallery || []).map(tplGal).join('');
+    $('#teamGrid').innerHTML = (d.team || []).map(tplMember).join('');
+
+    var tl = $('#tl');
+    if(tl){
+      tl.innerHTML = (d.logs || []).map(tplLog).join('');
+      renderLog();
+      observeLog();
     }
-  };
 
-  function initGrids(){
-    if(!$('#modGrid').querySelector('.item'))
-      $('#modGrid').innerHTML  = ['模组 A','模组 B','模组 C'].map(tpl.mod).join('');
-    if(!$('#galGrid').querySelector('.item'))
-      $('#galGrid').innerHTML  = ['中央城堡','海上灯塔','山间村落'].map(tpl.gal).join('');
-    if(!$('#teamGrid').querySelector('.item'))
-      $('#teamGrid').innerHTML = ['Steve_01','Alex_02','Creeper_03','Herobrine_04'].map(function(n,i){return tpl.member(n)}).join('');
+    $$('.img-wrap img').forEach(syncImg);
+    applyEditingState();
+    applyReveal();
+    $$('.tl-card').forEach(function(c, i){ prep(c, (i % 5) * 80); });
   }
 
-  /* ============ 状态应用 ============ */
+  function renderSplit(id, s){
+    var sec = document.getElementById(id);
+    if(!sec || !s) return;
+    var split = $('.split', sec);
+    split.classList.toggle('reverse', !!s.reversed);
+    var en = $('.sec-title .en', sec);
+    var title = $('.sec-title [data-edit]', sec);
+    if(en) en.textContent = s.en || '';
+    if(title) title.textContent = s.title || '';
+    var textBox = $('.text [data-edit]', split);
+    if(textBox) textBox.innerHTML = s.html || '';
+    var img = $('.img-wrap img', split);
+    if(img){ img.setAttribute('src', s.image || ''); syncImg(img); }
+  }
+
+  function applyBg(url){
+    var bg = $('#bg'); if(!bg) return;
+    if(url) bg.style.setProperty('--bg-image', 'url("' + String(url).replace(/"/g,'%22') + '")');
+    else bg.style.removeProperty('--bg-image');
+  }
+
+  /* ============ 收集（DOM → 数据） ============ */
+  function collectData(){
+    var d = deepClone(currentData);
+
+    // 临时显示所有日志项，确保 innerText 能取到换行
+    var tl = $('#tl');
+    var hiddenState = [];
+    if(tl) $$('.tl-item', tl).forEach(function(it){ hiddenState.push([it, it.hidden]); it.hidden = false; });
+
+    $$('[data-bind]').forEach(function(el){
+      setPath(d, el.getAttribute('data-bind'), textOf(el));
+    });
+
+    var bgv = $('#bg').style.getPropertyValue('--bg-image');
+    var m = bgv.match(/url\("?(.*?)"?\)/);
+    d.meta.bgImage = m ? m[1] : '';
+
+    ['map','story'].forEach(function(k){
+      var sec = document.getElementById(k);
+      if(!sec) return;
+      if(!d.sections) d.sections = {};
+      if(!d.sections[k]) d.sections[k] = {};
+      var split = $('.split', sec);
+      var textBox = $('.text [data-edit]', split);
+      var img = $('.img-wrap img', split);
+      d.sections[k].html = textBox ? textBox.innerHTML : '';
+      d.sections[k].reversed = split.classList.contains('reverse');
+      d.sections[k].image = img ? (img.getAttribute('src') || '') : '';
+      d.sections[k].en = $('.sec-title .en', sec) ? textOf($('.sec-title .en', sec)) : d.sections[k].en;
+      d.sections[k].title = $('.sec-title [data-edit]', sec) ? textOf($('.sec-title [data-edit]', sec)) : d.sections[k].title;
+    });
+
+    d.mods = $$('#modGrid [data-type="mod"]').map(function(el){
+      return {
+        name: textOf($('[data-f="name"]', el)),
+        desc: textOf($('[data-f="desc"]', el)),
+        code: $('[data-f="code"]', el).value,
+        price: $('[data-f="price"]', el).value
+      };
+    });
+
+    d.gallery = $$('#galGrid [data-type="gal"]').map(function(el){
+      return {
+        name: textOf($('[data-f="name"]', el)),
+        desc: textOf($('[data-f="desc"]', el)),
+        img: imgSrcOf(el)
+      };
+    });
+
+    d.team = $$('#teamGrid [data-type="member"]').map(function(el){
+      return {
+        name: textOf($('[data-f="name"]', el)),
+        role: textOf($('[data-f="role"]', el)),
+        img: imgSrcOf(el)
+      };
+    });
+
+    d.logs = $$('#tl .tl-item').map(function(it){
+      var time = $('time', it);
+      var stage = $('.stage', it);
+      var cat = $('.cat-chip', it);
+      var title = $('h3', it);
+      var body = $('.desc', it);
+      var img = $('.img-wrap img', it);
+      return {
+        date: time ? textOf(time) : '',
+        stage: stage ? textOf(stage) : '',
+        cat: cat ? textOf(cat) : '建筑',
+        title: title ? textOf(title) : '',
+        body: body ? textOf(body) : '',
+        img: img ? (img.getAttribute('src') || '') : ''
+      };
+    });
+
+    hiddenState.forEach(function(p){ p[0].hidden = p[1]; });
+    return d;
+  }
+
+  /* ============ 保存 / 导出 ============ */
+  function saveDraft(){
+    var d = collectData();
+    d.rev = Date.now();
+    try{
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
+      currentData = d;
+      toast('✓ 草稿已保存，刷新后仍可见');
+    }catch(err){
+      toast('保存失败：存储空间不足或被禁用', true);
+    }
+  }
+
+  function downloadFile(name, text, mime){
+    var blob = new Blob([text], {type: (mime || 'text/javascript') + ';charset=utf-8'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+  }
+
+  function exportDataJS(){
+    var d = collectData();
+    d.rev = Date.now();
+    currentData = d;
+    var header =
+      '/* 南风市 · 数据文件（由网站导出）\n' +
+      ' *\n' +
+      ' * 用法：用本文件覆盖仓库里的 data.js，然后提交即可。\n' +
+      ' * 页面加载时会对比 rev：文件里的 rev 比本地草稿新时，自动使用文件数据。\n' +
+      ' */\n\n';
+    downloadFile('data.js', header + 'window.MC_DATA = ' + JSON.stringify(d, null, 2) + ';\n');
+    toast('✓ 已导出 data.js，替换仓库文件即可');
+  }
+
+  function resetAll(){
+    if(!confirm('清除本地草稿并重新加载 data.js？')) return;
+    try{ localStorage.removeItem(DRAFT_KEY); }catch(e){}
+    location.reload();
+  }
+
+  /* ============ 编辑状态 ============ */
+  function applyEditingState(){
+    document.body.classList.toggle('editing', editing);
+    $$('[data-edit]').forEach(function(el){ el.setAttribute('contenteditable', editing ? 'true' : 'false'); });
+    $$('.field input').forEach(function(i){ i.readOnly = !editing; });
+    var b = $('#authBtn'); if(b) b.textContent = editing ? '🔓 退出编辑' : '🔑';
+  }
   function setEditing(on){
     editing = on;
     if(on) finishTypewriter();
-    document.body.classList.toggle('editing', on);
-    $$('[data-edit]').forEach(function(el){ el.setAttribute('contenteditable', on ? 'true' : 'false'); });
-    $$('.field input').forEach(function(i){ i.readOnly = !on; });
-    $('#authBtn').textContent = on ? '🔓 退出编辑' : '🔑';
+    applyEditingState();
   }
-  function syncInputs(){
-    finishTypewriter();                       // 保存/导出前确保打字机已打完
-    if(fx && fx.clearParallax) fx.clearParallax();   // 清掉视差产生的临时位移
-    $$('.field input').forEach(function(i){ i.setAttribute('value', i.value); });
-  }
-
-  /* ============ 初始化 ============ */
-  app.innerHTML = window.MC_APP_HTML || '';
-  initGrids();
-  setEditing(false);
-
-  /* 图片加载状态 */
-  document.addEventListener('error', function(e){
-    var t = e.target;
-    if(t && t.tagName === 'IMG' && t.getAttribute('src')){ var w = t.closest('.img-wrap'); if(w){ w.classList.remove('loading','ld'); w.classList.add('broken'); } }
-  }, true);
-  document.addEventListener('load', function(e){
-    var t = e.target;
-    if(t && t.tagName === 'IMG'){ var w = t.closest('.img-wrap'); if(w){ w.classList.remove('broken','loading'); w.classList.add('ld'); } }
-  }, true);
-
-  /* 粘贴纯文本 */
-  document.addEventListener('paste', function(e){
-    var el = e.target.closest && e.target.closest('[data-edit]');
-    if(!el || !editing) return;
-    e.preventDefault();
-    var txt = (e.clipboardData || window.clipboardData).getData('text/plain');
-    document.execCommand('insertText', false, txt);
-  });
 
   /* ============ 登录 ============ */
   var lock = $('#lock'), pwd = $('#pwd');
@@ -228,13 +545,45 @@
   function closeLock(){ lock.classList.add('hide'); pwd.value=''; $('#lockMsg').textContent=''; }
   $('#btnGuest').addEventListener('click', closeLock);
   lock.addEventListener('click', function(e){ if(e.target === lock) closeLock(); });
-  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && !lock.classList.contains('hide')) closeLock(); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && !lock.classList.contains('hide')) closeLock();
+    if((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S')){
+      if(!editing) return;
+      e.preventDefault(); saveDraft();
+    }
+  });
   $('#authBtn').addEventListener('click', function(){
     if(editing){ setEditing(false); toast('已退出编辑，当前为只读模式'); }
     else{ lock.classList.remove('hide'); setTimeout(function(){pwd.focus()},50); }
   });
 
-  /* ============ 点击事件（事件委托） ============ */
+  /* ============ 粘贴纯文本 ============ */
+  document.addEventListener('paste', function(e){
+    var el = e.target.closest && e.target.closest('[data-edit]');
+    if(!el || !editing) return;
+    e.preventDefault();
+    var txt = (e.clipboardData || window.clipboardData).getData('text/plain');
+    document.execCommand('insertText', false, txt);
+  });
+
+  /* ============ 图片加载状态 ============ */
+  document.addEventListener('error', function(e){
+    var t = e.target;
+    if(t && t.tagName === 'IMG' && t.getAttribute('src')){ var w = t.closest('.img-wrap'); if(w){ w.classList.remove('loading','ld'); w.classList.add('broken'); } }
+  }, true);
+  document.addEventListener('load', function(e){
+    var t = e.target;
+    if(t && t.tagName === 'IMG'){ var w = t.closest('.img-wrap'); if(w){ w.classList.remove('broken','loading'); w.classList.add('ld'); } }
+  }, true);
+  function syncImg(img){
+    var w = img.closest('.img-wrap'); if(!w) return;
+    if(!img.getAttribute('src')){ w.classList.remove('ld','loading','broken'); return; }
+    if(img.complete && img.naturalWidth){ w.classList.add('ld'); w.classList.remove('loading','broken'); }
+    else if(img.complete){ w.classList.remove('loading','ld'); w.classList.add('broken'); }
+    else { w.classList.remove('ld','broken'); w.classList.add('loading'); }
+  }
+
+  /* ============ 点击（主） ============ */
   document.addEventListener('click', function(e){
     var lb = $('#lightbox');
     if(lb.classList.contains('open')){ lb.classList.remove('open'); return; }
@@ -266,7 +615,7 @@
       return;
     }
 
-    if(!editing) return;  // 以下均为编辑功能，访客无效
+    if(!editing) return;
 
     if(act === 'swap'){
       var im2 = btn.closest('.img-wrap').querySelector('img');
@@ -280,47 +629,35 @@
       }
     }else if(act === 'flip'){
       btn.closest('.split').classList.toggle('reverse');
-    }else if(act === 'add-mod'){ add('#modGrid', tpl.mod());
-    }else if(act === 'add-gal'){ add('#galGrid', tpl.gal());
-    }else if(act === 'add-member'){ add('#teamGrid', tpl.member());
+    }else if(act === 'add-mod'){ addItem('#modGrid', tplMod());
+    }else if(act === 'add-gal'){ addItem('#galGrid', tplGal());
+    }else if(act === 'add-member'){ addItem('#teamGrid', tplMember());
     }else if(act === 'del'){
       if(confirm('确定删除这一项吗？')){ btn.closest('.item').remove(); renderStats(false); }
-    }else if(act === 'save'){
-      syncInputs();
-      try{ localStorage.setItem(KEY, app.innerHTML); toast('✓ 已保存到本浏览器'); }
-      catch(err){ toast('保存失败：存储空间不足或被禁用', true); }
+    }else if(act === 'save'){ saveDraft();
+    }else if(act === 'export-js'){ exportDataJS();
     }else if(act === 'bg'){
       var cur = $('#bg').style.getPropertyValue('--bg-image');
-      var m = cur.match(/url\("?(.*?)"?\)/);
-      var u = prompt('请输入背景图链接（留空则恢复默认深色背景）：', m ? m[1] : '');
-      if(u !== null){
-        u = u.trim();
-        if(u) $('#bg').style.setProperty('--bg-image', 'url("'+u.replace(/"/g,'%22')+'")');
-        else $('#bg').style.removeProperty('--bg-image');
-      }
-    }else if(act === 'export'){
-      exportHTML();
-    }else if(act === 'reset'){
-      if(confirm('将清除本浏览器已保存的修改并恢复初始内容，确定吗？')){
-        try{ localStorage.removeItem(KEY); }catch(err){}
-        location.reload();
-      }
+      var mm = cur.match(/url\("?(.*?)"?\)/);
+      var u = prompt('请输入背景图链接（留空则恢复默认背景）：', mm ? mm[1] : '');
+      if(u !== null) applyBg(u.trim());
+    }else if(act === 'reset'){ resetAll();
     }
   });
 
-  function add(sel, html){
+  function addItem(sel, html){
     var g = $(sel); g.insertAdjacentHTML('beforeend', html);
     setEditing(true);
-    prep(g.lastElementChild, 0);
+    var el = g.lastElementChild;
+    prep(el, 0);
+    $$('.img-wrap img', el).forEach(syncImg);
     renderStats(false);
-    g.lastElementChild.scrollIntoView({behavior:'smooth', block:'center'});
+    el.scrollIntoView({behavior:'smooth', block:'center'});
   }
 
-  /* ============ 动效与观感 ============ */
+  /* ============ 动效 ============ */
   var reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
-  function rt(el){ el.setAttribute('data-rt',''); return el; }   // 运行时元素，导出时会剔除
 
-  /* 滚动进度条 + 回到顶部 */
   var progress = rt(document.createElement('div')); progress.id = 'progress';
   document.body.appendChild(progress);
   var toTop = rt(document.createElement('button'));
@@ -329,7 +666,6 @@
   document.body.appendChild(toTop);
   toTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
 
-  /* 滚动联动：进度条 / 导航高亮 / 顶栏收缩 */
   var lastActive = null, ticking = false;
   function updateScroll(){
     var y = window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -357,35 +693,39 @@
   }, {passive:true});
   window.addEventListener('resize', updateScroll);
 
-  /* 入场动画（滚动到可视区时依次浮现） */
   var revealIO = ('IntersectionObserver' in window) ? new IntersectionObserver(function(es){
     es.forEach(function(en){
       if(en.isIntersecting){ en.target.classList.add('in'); revealIO.unobserve(en.target); }
     });
   }, {threshold:.1, rootMargin:'0px 0px -30px 0px'}) : null;
   function prep(el, delay){
+    if(!el) return;
     el.classList.remove('in'); el.classList.add('reveal');
     el.style.setProperty('--d', delay + 'ms');
     if(revealIO) revealIO.observe(el); else el.classList.add('in');
   }
   function applyReveal(){
-    $$('.reveal').forEach(function(e){ e.classList.remove('reveal','in'); });  // 清掉已保存内容里的旧状态
+    $$('.reveal').forEach(function(e){ e.classList.remove('reveal','in'); });
     $$('.hero,.sec-title,.split,footer').forEach(function(e){ prep(e, 0); });
     $$('.grid').forEach(function(g){ $$('.item', g).forEach(function(it, i){ prep(it, (i % 6) * 70); }); });
   }
 
-  /* 首页数据统计（自动统计模组/作品/成员数量，带数字滚动） */
   function renderStats(animate){
     var hero = $('.hero'); if(!hero) return;
     var box = $('.stats', hero);
     if(!box){
-      box = document.createElement('div'); box.className = 'stats';
+      box = rt(document.createElement('div')); box.className = 'stats';
       var go = $('.go', hero);
       if(go) go.insertAdjacentElement('afterend', box); else hero.appendChild(box);
     }
-    var defs = [['#modGrid','收藏模组'],['#galGrid','展出作品'],['#tl','建造日志','.tl-item'],['#teamGrid','建造成员']];
+    var defs = [
+      ['#modGrid [data-type="mod"]', '收藏模组'],
+      ['#galGrid [data-type="gal"]', '展出作品'],
+      ['#tl .tl-item', '建造日志'],
+      ['#teamGrid [data-type="member"]', '建造成员']
+    ];
     box.innerHTML = defs.map(function(d){
-      var g = $(d[0]), n = g ? g.querySelectorAll(d[2] || '.item').length : 0;
+      var g = $(d[0]), n = g ? document.querySelectorAll(d[0]).length : 0;
       return '<div><b data-n="'+n+'">'+(animate && !reduce ? 0 : n)+'</b><span>'+d[1]+'</span></div>';
     }).join('');
     if(animate && !reduce){
@@ -398,13 +738,12 @@
       })(performance.now());
     }
     if(!$('.scroll-hint', hero)){
-      var h = document.createElement('a');
+      var h = rt(document.createElement('a'));
       h.className = 'scroll-hint'; h.href = '#map'; h.setAttribute('aria-label','向下浏览'); h.textContent = '▼';
       hero.appendChild(h);
     }
   }
 
-  /* 鼠标聚光灯 + 卡片 3D 倾斜（仅鼠标，编辑模式不倾斜） */
   document.addEventListener('pointermove', function(e){
     if(e.pointerType !== 'mouse' || !e.target.closest) return;
     var card = e.target.closest('.item,.split'); if(!card) return;
@@ -423,7 +762,7 @@
     }
   });
 
-  /* ====== 昼夜主题 ====== */
+  /* ============ 昼夜主题 ============ */
   var fx = {};
   function isDay(){ return document.documentElement.getAttribute('data-theme') === 'day'; }
   function applyTheme(t){
@@ -447,7 +786,7 @@
     setTimeout(function(){ f.remove(); }, 750);
   }
   function initTheme(){
-    $$('[data-rt]', app).forEach(function(n){ n.remove(); });   // 清掉旧保存内容里残留的运行时元素
+    $$('[data-rt]', app).forEach(function(n){ n.remove(); });
     var hd = $('header.top'); if(!hd) return;
     var b = rt(document.createElement('button'));
     b.type = 'button'; b.className = 'px-btn small gray theme-btn';
@@ -456,7 +795,7 @@
     applyTheme(isDay() ? 'day' : 'night');
   }
 
-  /* ====== 打字机标语 ====== */
+  /* ============ 打字机 ============ */
   var tw = null;
   function finishTypewriter(){
     if(!tw || tw.done) return;
@@ -478,67 +817,10 @@
     }, 600);
   }
 
-  /* ====== 图片：占位 → 加载 → 淡入 ====== */
-  function syncImg(img){
-    var w = img.closest('.img-wrap'); if(!w) return;
-    if(!img.getAttribute('src')){ w.classList.remove('ld','loading','broken'); return; }
-    if(img.complete && img.naturalWidth){ w.classList.add('ld'); w.classList.remove('loading','broken'); }
-    else if(img.complete){ w.classList.remove('loading','ld'); w.classList.add('broken'); }
-    else { w.classList.remove('ld','broken'); w.classList.add('loading'); }
-  }
-
-  /* ====== 建造日志时间线 ====== */
+  /* ============ 日志 ============ */
   var CATS = ['建筑','红石','地形','优化'];
   var curFilter = 'all';
-  var SAMPLE = [
-    {date:'2026-11-22', stage:'v0.4 灯光与内饰', cat:'优化', title:'主城灯光重做', body:'把主城街道的火把全部换成灯笼与海晶灯，夜晚的整体氛围好了很多。顺手清理了重复的刷怪平台，减少了卡顿。'},
-    {date:'2026-11-15', stage:'v0.3 主体结构', cat:'建筑', title:'中央城堡封顶', body:'城堡的塔楼与城墙全部完成，屋顶用深板岩与石砖拼出了层次，下一步开始做内部大厅。'},
-    {date:'2026-11-08', stage:'v0.2 红石工坊', cat:'红石', title:'自动化农场上线', body:'完成小麦与甘蔗的自动收割线，使用观察者加活塞触发，产物统一送入仓库。'},
-    {date:'2026-10-30', stage:'v0.1 地形铺设', cat:'地形', title:'整平出生点周边地形', body:'划定了主城范围，整平了出生点周围的山地，并挖出了环绕城区的护城河。'}
-  ];
-  function todayStr(){
-    var d = new Date();
-    return d.getFullYear() + '-' + ('0' + (d.getMonth()+1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
-  }
-  function logImg(url){
-    return '<div class="img-wrap wide"><img src="'+esc(url||'')+'" alt="日志配图" loading="lazy" referrerpolicy="no-referrer">' +
-      '<button class="copy-btn" data-act="copy" type="button">⧉ 复制链接</button>' +
-      '<button class="swap-btn edit-only" data-act="swap" type="button">✎ 换图</button></div>';
-  }
-  function logTpl(o){
-    return '<article class="tl-item" data-cat="'+esc(o.cat)+'" data-date="'+esc(o.date)+'"><span class="tl-node"></span>' +
-      '<div class="tl-card item glass'+(o.img ? ' has-img' : '')+'">' +
-      '<div class="tl-meta"><time data-edit contenteditable="false">'+esc(o.date)+'</time>' +
-      (o.stage ? '<span class="stage" data-edit contenteditable="false">'+esc(o.stage)+'</span>' : '') +
-      '<button class="cat-chip" data-act="log-cat" data-c="'+esc(o.cat)+'" type="button" title="编辑模式下点击切换分类">'+esc(o.cat)+'</button></div>' +
-      '<h3 data-edit contenteditable="false">'+esc(o.title)+'</h3>' +
-      '<p class="desc" data-edit contenteditable="false">'+esc(o.body)+'</p>' +
-      (o.img ? logImg(o.img) : '') +
-      '<div class="tools edit-only">' +
-      '<button class="px-btn small gray add-img" data-act="log-addimg" type="button">＋ 配图</button>' +
-      '<button class="px-btn small gray rm-img" data-act="log-rmimg" type="button">✕ 移除图片</button>' +
-      '<button class="px-btn small danger" data-act="log-del" type="button">🗑 删除</button></div>' +
-      '</div></article>';
-  }
-  function ensureLog(){
-    if(!$('#log')){
-      var team = $('#team'); if(!team) return;
-      var sec = document.createElement('section'); sec.id = 'log';
-      sec.innerHTML =
-        '<div class="sec-title"><h2><span class="en">DEVLOG</span><span data-edit contenteditable="false">建造日志</span></h2>' +
-        '<button class="px-btn small edit-only" data-act="add-log" type="button">＋ 添加日志</button>' +
-        '<button class="px-btn small gray edit-only" data-act="log-sort" type="button">⇅ 按日期排序</button></div>' +
-        '<div class="tl-filters">' + ['全部'].concat(CATS).map(function(c, i){
-          return '<button class="chip'+(i ? '' : ' active')+'" data-act="filter" data-f="'+(i ? c : 'all')+'" type="button">'+c+'</button>';
-        }).join('') + '</div>' +
-        '<div class="tl" id="tl">' + SAMPLE.map(logTpl).join('') + '</div>';
-      team.parentNode.insertBefore(sec, team);
-    }
-    if(!$('nav.menu a[href="#log"]')){
-      var t = $('nav.menu a[href="#team"]');
-      if(t){ var a = document.createElement('a'); a.href = '#log'; a.textContent = '建造日志'; t.parentNode.insertBefore(a, t); }
-    }
-  }
+
   function getLogDate(it){
     var t = $('time', it), m = t && t.textContent.match(/(\d{4})\D(\d{1,2})\D(\d{1,2})/);
     return m ? m[1] + '-' + ('0'+m[2]).slice(-2) + '-' + ('0'+m[3]).slice(-2) : (it.getAttribute('data-date') || '');
@@ -582,7 +864,6 @@
       c.classList.remove('in'); void c.offsetWidth; c.classList.add('in');
     });
   }
-  /* 节点依次点亮：滚动到视口时，竖线从上往下生长，节点逐个弹出 */
   var litIO = ('IntersectionObserver' in window) ? new IntersectionObserver(function(es){
     var k = 0;
     es.filter(function(en){ return en.isIntersecting; })
@@ -595,8 +876,12 @@
   function observeOne(it){ it.classList.remove('lit'); if(litIO) litIO.observe(it); else it.classList.add('lit'); }
   function observeLog(){ $$('.tl-item').forEach(observeOne); }
 
-  /* 表单 */
+  /* 日志表单 */
   var modal = $('#logModal');
+  function todayStr(){
+    var d = new Date();
+    return d.getFullYear() + '-' + ('0' + (d.getMonth()+1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+  }
   function openLogForm(){
     $('#lfDate').value = todayStr(); $('#lfStage').value = ''; $('#lfCat').value = CATS[0];
     $('#lfTitle').value = ''; $('#lfBody').value = ''; $('#lfImg').value = ''; $('#lfMsg').textContent = '';
@@ -618,16 +903,17 @@
     };
     var tl = $('#tl');
     if(curFilter !== 'all' && curFilter !== o.cat) curFilter = 'all';
-    tl.insertAdjacentHTML('afterbegin', logTpl(o));
+    tl.insertAdjacentHTML('afterbegin', tplLog(o));
     var it = tl.firstElementChild;
     var imgEl = $('img', it); if(imgEl) syncImg(imgEl);
-    sortLog(); setEditing(true); renderLog();
-    prep($('.tl-card', it), 0); observeOne(it);
+    sortLog(); renderLog(); observeOne(it);
+    prep($('.tl-card', it), 0);
+    applyEditingState();
     renderStats(false); closeLogForm(); toast('✓ 日志已添加');
     it.scrollIntoView({behavior:'smooth', block:'center'});
   });
 
-  /* 点击：筛选（所有人）+ 日志编辑（仅编辑模式） */
+  /* 点击（日志） */
   document.addEventListener('click', function(e){
     if(!e.target.closest) return;
     var b = e.target.closest('[data-act]');
@@ -653,7 +939,7 @@
       var url = prompt('请输入图片链接（图床 URL，可先留空稍后再填）：', '');
       if(url === null) return;
       var card = $('.tl-card', it);
-      $('.tools', card).insertAdjacentHTML('beforebegin', logImg(url.trim()));
+      $('.tools', card).insertAdjacentHTML('beforebegin', logImgHTML(url.trim()));
       var im2 = $('img', card); if(im2) syncImg(im2);
       renderLog();
     }
@@ -662,7 +948,7 @@
     }
   });
 
-  /* ====== 背景特效画布：星月/日云 + 光点 + 风线 + 夜晚天际线（含视差） ====== */
+  /* ============ 背景特效 ============ */
   function startFX(){
     var cv = rt(document.createElement('canvas'));
     cv.style.cssText = 'position:fixed;left:0;top:0;width:100%;height:100%;z-index:-1;pointer-events:none';
@@ -688,7 +974,6 @@
         x += w + ((Math.random() * 3) | 0) * 8;
       }
     }
-    /* 粒子总数 ≤ 60：夜晚桌面 24 光点 + 32 星星；白天 36 光点；手机更少 */
     function layout(force){
       var nw = window.innerWidth, nh = window.innerHeight;
       if(!force && nw === W && Math.abs(nh - H) < 120) return;
@@ -727,14 +1012,12 @@
         [[2,0,2],[1,1,2],[0,2,2],[0,3,2],[1,4,2],[2,5,2]].forEach(function(r){ ctx.fillRect(cx + r[0]*u, cy + r[1]*u, r[2]*u, u); });
         ctx.globalAlpha = 1;
       }
-      /* 云（视差：随滚动缓慢上移） */
       ctx.fillStyle = day ? 'rgba(255,255,255,.78)' : 'rgba(255,255,255,.06)';
       clouds.forEach(function(c){
         c.x += c.v * dt; if(c.x > W + c.u * 6) c.x = -c.u * 6;
         var y = mod(c.y - sy * .12, H * .6) + 20;
         SHAPE.forEach(function(r){ ctx.fillRect(Math.round(c.x + r[0]*c.u), Math.round(y + r[1]*c.u), r[2]*c.u, r[3]*c.u); });
       });
-      /* 夜晚：天际线 + 亮灯的方块窗户 */
       if(!day){
         ctx.fillStyle = 'rgba(8,16,32,.88)';
         for(i = 0; i < city.length; i++) ctx.fillRect(city[i].x, H - city[i].h, city[i].w, city[i].h);
@@ -743,7 +1026,6 @@
         for(i = 0; i < wins.length; i++) if(wins[i].on) ctx.fillRect(wins[i].x, H + wins[i].y, 6, 8);
         ctx.globalAlpha = 1;
       }
-      /* 光点（视差：每个粒子有自己的深度） */
       var pal = day ? DAYC : NIGHTC;
       motes.forEach(function(m){
         m.y -= m.vy * dt; m.x += Math.sin(ts / 1000 * m.sp + m.ph) * .35 * dt;
@@ -752,7 +1034,6 @@
         ctx.fillRect(Math.round(mod(m.x, W)), Math.round(mod(m.y - sy * .25 * m.z, H + 16) - 8), m.s, m.s);
       });
       ctx.globalAlpha = 1;
-      /* 南风风线 */
       if(dt > 0){
         spawn -= dt;
         if(spawn <= 0 && streaks.length < 4){ streaks.push({x:-160, y:rnd(40, H - 40), len:rnd(60,140), v:rnd(4,7)}); spawn = rnd(40,110); }
@@ -769,7 +1050,7 @@
     fx.clearParallax = function(){ heroEls.forEach(function(p){ p[0].style.translate = ''; }); applied = NaN; };
     window.addEventListener('resize', function(){ layout(false); });
     layout(true);
-    if(reduce) return;          // 减少动态效果：只画静态一帧
+    if(reduce) return;
 
     function applyHero(){
       var s = Math.min(sy, 900);
@@ -786,42 +1067,15 @@
     requestAnimationFrame(frame);
   }
 
-  /* ====== 初始化 ====== */
-  $$('[style*="translate"]', app).forEach(function(n){ n.style.translate = ''; });
-  ensureLog();
-  $$('.img-wrap img').forEach(syncImg);
-  applyReveal();
-  $$('.tl-card').forEach(function(c, i){ prep(c, (i % 5) * 80); });
-  sortLog(); renderLog(); observeLog();
+  /* ============ 启动 ============ */
+  setEditing(false);
+  renderAll();
+  initTheme();
   renderStats(true);
   updateScroll();
-  initTheme();
   startTypewriter();
   startFX();
-
-  /* ============ 导出 ============ */
-  function exportHTML(){
-    syncInputs();
-    var clone = document.documentElement.cloneNode(true);
-    $$('[data-rt]', clone).forEach(function(n){ n.remove(); });   // 去掉运行时生成的特效元素
-    clone.removeAttribute('data-theme');                          // 主题由访客本地偏好/时间决定
-    $$('[style*="translate"]', clone).forEach(function(n){ n.style.translate = ''; });
-    $$('.item,.split', clone).forEach(function(n){ n.style.transform=''; n.style.removeProperty('--mx'); n.style.removeProperty('--my'); });
-    $$('[contenteditable]', clone).forEach(function(el){ el.setAttribute('contenteditable','false'); });
-    $$('.field input', clone).forEach(function(i){ i.setAttribute('readonly',''); });
-    var body = clone.querySelector('body'); body.classList.remove('editing');
-    var l = clone.querySelector('#lock'); if(l) l.classList.add('hide');
-    var lb = clone.querySelector('#lightbox'); if(lb) lb.classList.remove('open');
-    var t = clone.querySelector('#toast'); if(t){ t.className=''; t.textContent=''; }
-    var a = clone.querySelector('#authBtn'); if(a) a.textContent = '🔑';
-    var html = '<!DOCTYPE html>\n' + clone.outerHTML;
-    var blob = new Blob([html], {type:'text/html;charset=utf-8'});
-    var link = document.createElement('a');
-    link.href = URL.createObjectURL(blob); link.download = 'index.html';
-    document.body.appendChild(link); link.click(); link.remove();
-    setTimeout(function(){ URL.revokeObjectURL(link.href); }, 2000);
-    toast('✓ 已导出 HTML 文件');
-  }
 })();
 </script>
-</body></html>
+</body>
+</html>
