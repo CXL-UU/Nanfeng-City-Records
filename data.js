@@ -99,7 +99,7 @@ window.MC_DATA = {
     },
     {
       "name": "喵宁学院",
-      "desc": "一进门，是笔直的求知路；\n抬头望，是明亮的教学楼。\n从这道门开始，每一段成长都有迹可循。",
+      "desc": "一进门，是笔直的求知路； 抬头望，是明亮的教学楼。 从这道门开始，每一段成长都有迹可循。",
       "img": "https://piv.cc.cd/file/BQACAgUAAyEGAASLVN5eAAJ8ymsCdswqfan_e8VjCDITFFcpGBozAAIwIwACnK8RVL1lyFwhJwqIPQQ.jpg"
     },
     {
@@ -109,8 +109,13 @@ window.MC_DATA = {
     },
     {
       "name": "喵宁学院学生活动综合楼",
-      "desc": "云把天空占满了，花把小路占满了\n中间只剩下一个人，和一段不用赶的时间",
+      "desc": "云把天空占满了，花把小路占满了 中间只剩下一个人，和一段不用赶的时间",
       "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIWwWsCnVfgNWEGGT9c89GvG1c8ndcQAAITIQAClVsZUM9YX9ehuqg9PQQ.jpg"
+    },
+    {
+      "name": "南城街道",
+      "desc": "",
+      "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIWwmsCpx2Evtu1iopPWRlrNxnc5odtAAIcIQAClVsZUFtIvqR8k70VPQQ.jpg"
     }
   ],
   "team": [
@@ -142,6 +147,62 @@ window.MC_DATA = {
   ],
   "logs": [
     {
+      "date": "2026-11-22",
+      "stage": "V0.6",
+      "cat": "优化",
+      "title": "轨道交通",
+      "body": "优化了1、2号线的应答机，",
+      "img": ""
+    },
+    {
+      "date": "2026-11-21",
+      "stage": "V1.2",
+      "cat": "地形",
+      "title": "喵宁镇划入版图",
+      "body": "由于大学以及喵宁城保护区的加入，喵宁镇正式规划",
+      "img": ""
+    },
+    {
+      "date": "2026-11-18",
+      "stage": "V0.1",
+      "cat": "建筑",
+      "title": "喵宁学院建成",
+      "body": "喵宁学院楼部以及大楼全部建成，为西校园做好准备",
+      "img": ""
+    },
+    {
+      "date": "2026-11-12",
+      "stage": "V1.1",
+      "cat": "地形",
+      "title": "云端镇跨入版图",
+      "body": "云端镇正式划入版图，开始主体建设区",
+      "img": ""
+    },
+    {
+      "date": "2026-11-06",
+      "stage": "V0.2内饰建筑",
+      "cat": "建筑",
+      "title": "市政府内饰",
+      "body": "为市政府完成了所有房间的内饰",
+      "img": ""
+    },
+    {
+      "date": "2026-11-05",
+      "stage": "V0.1红石系统",
+      "cat": "红石",
+      "title": "红石联动",
+      "body": "为河东站地下站增加了红石灯联动，但处于初始版本",
+      "img": ""
+    },
+    {
+      "date": "2026-11-03",
+      "stage": "V0.2地形优化",
+      "cat": "地形",
+      "title": "水域优化",
+      "body": "优化了两江流域的源头，为建筑让步",
+      "img": ""
+    },
+    {
       "date": "2026-10-31",
       "stage": "V0.1",
       "cat": "建筑",
@@ -150,5 +211,5 @@ window.MC_DATA = {
       "img": ""
     }
   ],
-  "rev": 1795333541523
+  "rev": 1795336009716
 };
