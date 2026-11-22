@@ -33,7 +33,7 @@ window.MC_DATA = {
   "sectionTitles": {
     "mods": {
       "en": "",
-      "title": "使用模组"
+      "title": "使用模组（单位：钻石）"
     },
     "gallery": {
       "en": "",
@@ -48,17 +48,69 @@ window.MC_DATA = {
       "title": "人员规划"
     }
   },
-  "mods": [],
+  "mods": [
+    {
+      "name": "快速建造",
+      "desc": "主力建造模组",
+      "code": "8339603",
+      "price": "免费"
+    },
+    {
+      "name": "火车高铁站设施",
+      "desc": "装饰模组",
+      "code": "8717718 ",
+      "price": "600"
+    },
+    {
+      "name": "城市交通1A：自定义红绿灯",
+      "desc": "装饰模组",
+      "code": "7929908 ",
+      "price": "300"
+    },
+    {
+      "name": "地铁非付费区设施-枫城地铁",
+      "desc": "装饰模组",
+      "code": "8646681",
+      "price": "免费"
+    },
+    {
+      "name": "我的地铁 主包",
+      "desc": "链接：我的地铁",
+      "code": "3810195",
+      "price": "免费"
+    },
+    {
+      "name": "玻璃幕墙",
+      "desc": "装饰模组",
+      "code": "1214211",
+      "price": ""
+    }
+  ],
   "gallery": [
     {
       "name": "万象轨道交通",
-      "desc": "落日、钢架、一列绿皮车。\n方块世界里的黄昏，也足够温柔。",
+      "desc": "落日、钢架、一列绿皮车。 方块世界里的黄昏，也足够温柔。",
       "img": "https://piv.cc.cd/file/BQACAgUAAyEGAASLVN5eAAJ8yWsCdmiKrCZkd0Tor94uefNyFSbXAAIuIwACnK8RVN05Zb5M5YsvPQQ.jpg"
     },
     {
       "name": "下寮广场",
-      "desc": "块里的城市，也有它的黄昏与远方。\n——下寮广场，今日竣工。",
+      "desc": "块里的城市，也有它的黄昏与远方。 ——下寮广场，今日竣工。",
       "img": "https://piv.cc.cd/file/BQACAgUAAyEGAASLVN5eAAJ8c2sBiUYhUVYYeD9J0IUlaZLlUDoEAALsIAACCiERVKEm8QEnay7sPQQ.jpg"
+    },
+    {
+      "name": "喵宁学院",
+      "desc": "一进门，是笔直的求知路；\n抬头望，是明亮的教学楼。\n从这道门开始，每一段成长都有迹可循。",
+      "img": "https://piv.cc.cd/file/BQACAgUAAyEGAASLVN5eAAJ8ymsCdswqfan_e8VjCDITFFcpGBozAAIwIwACnK8RVL1lyFwhJwqIPQQ.jpg"
+    },
+    {
+      "name": "云端镇",
+      "desc": "紫色地标塔楼立于街心，医院、天桥、住宅楼各归其位。",
+      "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIWwGsCnM1VnJ2wHB8X7LkUumGh1WbKAAISIQAClVsZUAZn0Ndrao3EPQQ.jpg"
+    },
+    {
+      "name": "喵宁学院学生活动综合楼",
+      "desc": "云把天空占满了，花把小路占满了\n中间只剩下一个人，和一段不用赶的时间",
+      "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIWwWsCnVfgNWEGGT9c89GvG1c8ndcQAAITIQAClVsZUM9YX9ehuqg9PQQ.jpg"
     }
   ],
   "team": [
@@ -98,5 +150,5 @@ window.MC_DATA = {
       "img": ""
     }
   ],
-  "rev": 1795330849762
+  "rev": 1795333541523
 };
