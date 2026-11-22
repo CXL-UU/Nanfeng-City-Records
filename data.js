@@ -84,6 +84,48 @@ window.MC_DATA = {
       "desc": "装饰模组",
       "code": "1214211",
       "price": ""
+    },
+    {
+      "name": "我的地铁4C 追加包",
+      "desc": "链接：我的地铁",
+      "code": "3194200",
+      "price": "1000"
+    },
+    {
+      "name": "我的地铁4L 游戏开发部列车追加包",
+      "desc": "链接：我的地铁",
+      "code": "4030095",
+      "price": "600"
+    },
+    {
+      "name": "我的地铁8A追加包",
+      "desc": "链接：我的地铁",
+      "code": "4755463",
+      "price": "1200"
+    },
+    {
+      "name": "我的高铁 QH500动车追加包",
+      "desc": "链接：我的地铁",
+      "code": "4169912",
+      "price": "1600"
+    },
+    {
+      "name": "LTR 智能高铁站公益设施",
+      "desc": "装饰模组",
+      "code": "1023395",
+      "price": "1000"
+    },
+    {
+      "name": "玻璃幕墙蓝色系列玻璃扩展包",
+      "desc": "装饰模组",
+      "code": "8305755",
+      "price": "600"
+    },
+    {
+      "name": "玻璃幕墙灰色系玻璃扩展包",
+      "desc": "装饰模组",
+      "code": "8737078",
+      "price": "600"
     }
   ],
   "gallery": [
@@ -114,8 +156,23 @@ window.MC_DATA = {
     },
     {
       "name": "南城街道",
-      "desc": "",
+      "desc": "抬头的时候，\n天空被切成一条窄窄的缝。\n左边是绿的，右边是蓝的，\n中间只剩下云，和一点风。",
       "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIWwmsCpx2Evtu1iopPWRlrNxnc5odtAAIcIQAClVsZUFtIvqR8k70VPQQ.jpg"
+    },
+    {
+      "name": "新萝港镇",
+      "desc": "高架桥把天空压低，\n草地却还在长花。\n蓝色、白色、黄色的小方块，\n是这座城市最柔软的地方",
+      "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIWw2sC06Eq7RTJGhR-U49JPxRccGAPAAJ3IQAClVsZUNsVBTj-hLwUPQQ.jpg"
+    },
+    {
+      "name": "东城街道",
+      "desc": "铁轨笔直地往前，\n一直伸到云里去。\n左边是城市，右边是树，\n中间是我要去的方向",
+      "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIWxGsC0_4twLukfzSIb5zisKwFIB9QAAJ8IQAClVsZUL2bGyGzsBh_PQQ.jpg"
+    },
+    {
+      "name": "河东镇",
+      "desc": "在轨道上看路口，\n车流是静止的，云在动。\n红色那栋楼最显眼，\n像整条街给自己留的一个记号",
+      "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIWxWsC1DgTt4AE6CDJWO68CgdSiL9xAAKCIQAClVsZUN91WrmR0QF5PQQ.jpg"
     }
   ],
   "team": [
@@ -146,6 +203,14 @@ window.MC_DATA = {
     }
   ],
   "logs": [
+    {
+      "date": "2026-11-22",
+      "stage": "V9.9",
+      "cat": "优化",
+      "title": "道路优化",
+      "body": "优化了喵宁镇主干道部分",
+      "img": ""
+    },
     {
       "date": "2026-11-22",
       "stage": "V0.6",
@@ -211,5 +276,5 @@ window.MC_DATA = {
       "img": ""
     }
   ],
-  "rev": 1795336009716
+  "rev": 1795347858814
 };
