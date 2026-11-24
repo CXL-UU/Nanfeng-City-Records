@@ -18,14 +18,14 @@ window.MC_DATA = {
     "map": {
       "html": "南城街道 —— 科技之城，未来引擎。（科技 CBD 区）<div>东城街道 —— 江畔新城，双塔映水。（滨江商务区）<br><div>· 元美镇 —— 生态办公，森系生活。（绿色 CBD 区）</div><div>· 河东镇 —— 温馨港湾，理想安居。（舒适住宅区）</div><div>· 新萝港镇 —— 岁月留痕，活力新生。（半老城区·半新区）</div><div>· 金都镇 —— 经典传承，岁月静好。（经典中心区）</div><div>· 喵宁镇 —— 青春洋溢，学术摇篮。（大学城）</div><div>· 云端镇 —— 拔地而起，无限可能。（新区）</div><div>· 万象镇 —— 城市中枢，行政核心。（市政区）</div></div>",
       "reversed": false,
-      "image": "https://piv.cc.cd/file/BQACAgUAAyEGAASLVN5eAAJ8sGsCa3cZLaWM1mBv9zXExdbHMpUqAALjIgACnK8RVDETxRakk0R5PQQ.jpg",
+      "image": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIXSWsFfFlyvZzKd71dYIOeBqksQlh8AAIsIAACt3UoUGgUyVrt596qPQQ.png",
       "en": "",
       "title": "区域规划"
     },
     "story": {
       "html": "很久以前，这里只有滩涂。<div>&nbsp; &nbsp; &nbsp; &nbsp; 最早的人顺着河流走到这里，发现土地平坦得不可思议，于是停下来，用深褐色的砖石砌起第一道城墙。</div><div>平原给了南风市无限扩张的可能，也给了它没有边界的迷茫。直到那场推倒重来的规划改革，才有了今天规整的网格。</div><div>如今595.5万人在这里生活，老砖墙与摩天楼隔街相望。</div><div>它至今没有停止生长。</div><div>◆联动：该城市不仅在 MC 有，我们还在《南风异闻录》使用了南风市作为主体城市！</div>",
       "reversed": true,
-      "image": "https://piv.cc.cd/file/BQACAgUAAyEGAASLVN5eAAJ8sWsCa-X2EufnI4WvKoMELzY94hsrAALkIgACnK8RVApl__qTv-nWPQQ.jpg",
+      "image": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIXSmsFfhme3EHUKeEao1ULJ9fxpIqaAAItIAACt3UoUGg2s0Bp_VkdPQQ.png",
       "en": "",
       "title": "背景故事"
     }
@@ -292,7 +292,7 @@ window.MC_DATA = {
       "builders": [
         "HD"
       ],
-      "img": "https://piv.cc.cd/file/BQACAgUAAyEGAASLVN5eAAJ8yWsCdmiKrCZkd0Tor94uefNyFSbXAAIuIwACnK8RVN05Zb5M5YsvPQQ.jpg"
+      "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIXUmsFgWx3Ws-lTf-j28tZSsv-OVlzAAI4IAACt3UoUIdKSvHbAgEJPQQ.jpg"
     },
     {
       "name": "下寮广场",
@@ -301,7 +301,7 @@ window.MC_DATA = {
       "builders": [
         "风尘仆仆"
       ],
-      "img": "https://piv.cc.cd/file/BQACAgUAAyEGAASLVN5eAAJ8c2sBiUYhUVYYeD9J0IUlaZLlUDoEAALsIAACCiERVKEm8QEnay7sPQQ.jpg"
+      "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIXUWsFgVhCHSeVfiHJk-4rHKYegtc_AAI3IAACt3UoUBGOBsLTC9D6PQQ.jpg"
     },
     {
       "name": "喵宁学院",
@@ -310,7 +310,7 @@ window.MC_DATA = {
       "builders": [
         "天羽悠悠"
       ],
-      "img": "https://piv.cc.cd/file/BQACAgUAAyEGAASLVN5eAAJ8ymsCdswqfan_e8VjCDITFFcpGBozAAIwIwACnK8RVL1lyFwhJwqIPQQ.jpg"
+      "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIXU2sFgYM8clclaFt9jT__o0ArqDaMAAI6IAACt3UoUOuW_JBn4no1PQQ.jpg"
     },
     {
       "name": "云端镇",
@@ -384,33 +384,42 @@ window.MC_DATA = {
         "南风真菌"
       ],
       "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIXC2sFB7sKp3lkfFseYpXurxFlPVs4AAJRHwACt3UoUPa5DzPRwPcXPQQ.jpg"
+    },
+    {
+      "name": "东城街道",
+      "desc": "",
+      "cat": "单体建筑",
+      "builders": [
+        "南风真菌"
+      ],
+      "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIXS2sFfoScaA2vk5YBLjD79UM-AYKMAAIvIAACt3UoUMiGSejMDLojPQQ.jpg"
     }
   ],
   "team": [
     {
       "name": "南风真菌",
       "role": "市长",
-      "img": "https://piv.cc.cd/file/BQACAgUAAyEGAASLVN5eAAJ8smsCbF3S7yj6gdSI3ch1gNfPF98BAALmIgACnK8RVKq0aw105yw-PQQ.jpg"
+      "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIXTGsFf_CImPjdhpjvRCgrbFSP0DNwAAIwIAACt3UoUD4DkXXIYJKOPQQ.jpg"
     },
     {
       "name": "HD",
       "role": "轨道交通社长",
-      "img": "https://piv.cc.cd/file/BQACAgUAAyEGAASLVN5eAAJ8s2sCbOdkCdAPocFbqSVI08_8qIhNAALpIgACnK8RVNi3FmbHa68FPQQ.jpg"
+      "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIXTWsFgFgTPPQ7ARM0tT69ThGPx_QDAAIyIAACt3UoUEL9kFUAAYKX2D0E.jpg"
     },
     {
       "name": "天羽悠悠",
       "role": "女副市长",
-      "img": "https://piv.cc.cd/file/BQACAgUAAyEGAASLVN5eAAJ80msCkbrLEEbDx7AoCr3NRmcB-OhvAAKAIwACnK8RVD2pvExW5qvZPQQ.jpg"
+      "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIXTmsFgIl2aVTt1OGdR04hSW3bBFKCAAIzIAACt3UoUBEocRjcq0OPPQQ.jpg"
     },
     {
       "name": "龙华WX",
       "role": "技术社",
-      "img": "https://piv.cc.cd/file/BQACAgUAAyEGAASLVN5eAAIWm2n8CAySePLfp1euG6_M_H5NNMHwAAJJGwAChunhV2RBdWoJq59MOwQ.jpg"
+      "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIXT2sFgNd8WeCA_h0dFeahlR4NC40HAAI0IAACt3UoUJk-BVRfEn2ZPQQ.jpg"
     },
     {
       "name": "风尘仆仆",
       "role": "主建筑社",
-      "img": "https://piv.cc.cd/file/BQACAgUAAyEGAASLVN5eAAJ81GsCkm39R0NGGXChBAvY2ITtIl-5AAKDIwACnK8RVAH25NaGYTaoPQQ.jpg"
+      "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIXUGsFgRp0D9AJ7zXwR4EtNGQ6O9VIAAI2IAACt3UoUGbtwcBsCGdYPQQ.jpg"
     },
     {
       "name": "鹿乃故里",
@@ -424,6 +433,21 @@ window.MC_DATA = {
     }
   ],
   "logs": [
+    {
+      "date": "2026-11-24",
+      "stage": "V0.1",
+      "cat": "建筑",
+      "title": "曲州大酒店",
+      "body": "确定了位置，开始建设地图",
+      "builders": [
+        "南风真菌",
+        "龙华WX",
+        "风尘仆仆",
+        "鹿乃故里",
+        "风又"
+      ],
+      "img": ""
+    },
     {
       "date": "2026-11-24",
       "stage": "V10.0",
@@ -567,5 +591,5 @@ window.MC_DATA = {
       "img": ""
     }
   ],
-  "rev": 1795492641050
+  "rev": 1795522962377
 };
