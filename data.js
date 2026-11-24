@@ -51,91 +51,78 @@ window.MC_DATA = {
   "mods": [
     {
       "name": "快速建造",
-      "desc": "主力建造模组",
       "cat": "主力模组",
       "code": "8339603",
       "price": "免费"
     },
     {
       "name": "火车高铁站设施",
-      "desc": "装饰模组",
       "cat": "装饰模组",
       "code": "8717718",
       "price": "600"
     },
     {
       "name": "城市交通1A：自定义红绿灯",
-      "desc": "装饰模组",
       "cat": "装饰模组",
       "code": "7929908",
       "price": "300"
     },
     {
       "name": "地铁非付费区设施-枫城地铁",
-      "desc": "装饰模组",
       "cat": "装饰模组",
       "code": "8646681",
       "price": "免费"
     },
     {
       "name": "我的地铁 主包",
-      "desc": "链接：我的地铁",
       "cat": "主力模组",
       "code": "3810195",
       "price": "免费"
     },
     {
       "name": "玻璃幕墙",
-      "desc": "装饰模组",
       "cat": "装饰模组",
       "code": "1214211",
       "price": ""
     },
     {
       "name": "我的地铁4C 追加包",
-      "desc": "链接：我的地铁",
       "cat": "装饰模组",
       "code": "3194200",
       "price": "1000"
     },
     {
       "name": "我的地铁4L 游戏开发部列车追加包",
-      "desc": "链接：我的地铁",
       "cat": "装饰模组",
       "code": "4030095",
       "price": "600"
     },
     {
       "name": "我的地铁8A追加包",
-      "desc": "链接：我的地铁",
       "cat": "装饰模组",
       "code": "4755463",
       "price": "1200"
     },
     {
       "name": "我的高铁 QH500动车追加包",
-      "desc": "链接：我的地铁",
       "cat": "装饰模组",
       "code": "4169912",
       "price": "1600"
     },
     {
       "name": "LTR 智能高铁站公益设施",
-      "desc": "装饰模组",
       "cat": "装饰模组",
       "code": "1023395",
       "price": "1000"
     },
     {
       "name": "玻璃幕墙蓝色系列玻璃扩展包",
-      "desc": "装饰模组",
       "cat": "装饰模组",
       "code": "8305755",
       "price": "600"
     },
     {
       "name": "玻璃幕墙灰色系玻璃扩展包",
-      "desc": "装饰模组",
       "cat": "装饰模组",
       "code": "8737078",
       "price": "600"
@@ -146,54 +133,63 @@ window.MC_DATA = {
       "name": "万象轨道交通",
       "desc": "落日、钢架、一列绿皮车。 方块世界里的黄昏，也足够温柔。",
       "cat": "轨道",
+      "builders": [],
       "img": "https://piv.cc.cd/file/BQACAgUAAyEGAASLVN5eAAJ8yWsCdmiKrCZkd0Tor94uefNyFSbXAAIuIwACnK8RVN05Zb5M5YsvPQQ.jpg"
     },
     {
       "name": "下寮广场",
       "desc": "块里的城市，也有它的黄昏与远方。 ——下寮广场，今日竣工。",
       "cat": "建筑群",
+      "builders": [],
       "img": "https://piv.cc.cd/file/BQACAgUAAyEGAASLVN5eAAJ8c2sBiUYhUVYYeD9J0IUlaZLlUDoEAALsIAACCiERVKEm8QEnay7sPQQ.jpg"
     },
     {
       "name": "喵宁学院",
       "desc": "一进门，是笔直的求知路； 抬头望，是明亮的教学楼。 从这道门开始，每一段成长都有迹可循。",
       "cat": "大型建筑群",
+      "builders": [],
       "img": "https://piv.cc.cd/file/BQACAgUAAyEGAASLVN5eAAJ8ymsCdswqfan_e8VjCDITFFcpGBozAAIwIwACnK8RVL1lyFwhJwqIPQQ.jpg"
     },
     {
       "name": "云端镇",
       "desc": "紫色地标塔楼立于街心，医院、天桥、住宅楼各归其位。",
       "cat": "大型建筑群",
+      "builders": [],
       "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIWwGsCnM1VnJ2wHB8X7LkUumGh1WbKAAISIQAClVsZUAZn0Ndrao3EPQQ.jpg"
     },
     {
       "name": "喵宁学院学生活动综合楼",
       "desc": "云把天空占满了，花把小路占满了 中间只剩下一个人，和一段不用赶的时间",
       "cat": "单体建筑",
+      "builders": [],
       "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIWwWsCnVfgNWEGGT9c89GvG1c8ndcQAAITIQAClVsZUM9YX9ehuqg9PQQ.jpg"
     },
     {
       "name": "南城街道",
       "desc": "抬头的时候，\n天空被切成一条窄窄的缝。\n左边是绿的，右边是蓝的，\n中间只剩下云，和一点风。",
       "cat": "道路",
+      "builders": [],
       "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIWwmsCpx2Evtu1iopPWRlrNxnc5odtAAIcIQAClVsZUFtIvqR8k70VPQQ.jpg"
     },
     {
       "name": "新萝港镇",
       "desc": "高架桥把天空压低，\n草地却还在长花。\n蓝色、白色、黄色的小方块，\n是这座城市最柔软的地方",
       "cat": "大型建筑群",
+      "builders": [],
       "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIWw2sC06Eq7RTJGhR-U49JPxRccGAPAAJ3IQAClVsZUNsVBTj-hLwUPQQ.jpg"
     },
     {
       "name": "东城街道",
       "desc": "铁轨笔直地往前，\n一直伸到云里去。\n左边是城市，右边是树，\n中间是我要去的方向",
       "cat": "轨道",
+      "builders": [],
       "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIWxGsC0_4twLukfzSIb5zisKwFIB9QAAJ8IQAClVsZUL2bGyGzsBh_PQQ.jpg"
     },
     {
       "name": "河东镇",
       "desc": "在轨道上看路口，\n车流是静止的，云在动。\n红色那栋楼最显眼，\n像整条街给自己留的一个记号",
       "cat": "建筑群",
+      "builders": [],
       "img": "https://img.i1.pe/file/BQACAgQAAyEGAASauL5iAAIWxWsC1DgTt4AE6CDJWO68CgdSiL9xAAKCIQAClVsZUN91WrmR0QF5PQQ.jpg"
     }
   ],
@@ -231,6 +227,7 @@ window.MC_DATA = {
       "cat": "优化",
       "title": "道路优化",
       "body": "优化了喵宁镇主干道部分",
+      "builders": [],
       "img": ""
     },
     {
@@ -239,6 +236,7 @@ window.MC_DATA = {
       "cat": "优化",
       "title": "轨道交通",
       "body": "优化了1、2号线的应答机，",
+      "builders": [],
       "img": ""
     },
     {
@@ -247,6 +245,7 @@ window.MC_DATA = {
       "cat": "地形",
       "title": "喵宁镇划入版图",
       "body": "由于大学以及喵宁城保护区的加入，喵宁镇正式规划",
+      "builders": [],
       "img": ""
     },
     {
@@ -255,6 +254,7 @@ window.MC_DATA = {
       "cat": "建筑",
       "title": "喵宁学院建成",
       "body": "喵宁学院楼部以及大楼全部建成，为西校园做好准备",
+      "builders": [],
       "img": ""
     },
     {
@@ -263,6 +263,7 @@ window.MC_DATA = {
       "cat": "地形",
       "title": "云端镇跨入版图",
       "body": "云端镇正式划入版图，开始主体建设区",
+      "builders": [],
       "img": ""
     },
     {
@@ -271,6 +272,7 @@ window.MC_DATA = {
       "cat": "建筑",
       "title": "市政府内饰",
       "body": "为市政府完成了所有房间的内饰",
+      "builders": [],
       "img": ""
     },
     {
@@ -279,6 +281,7 @@ window.MC_DATA = {
       "cat": "轨道交通",
       "title": "红石联动",
       "body": "为河东站地下站增加了红石灯联动，但处于初始版本",
+      "builders": [],
       "img": ""
     },
     {
@@ -287,6 +290,7 @@ window.MC_DATA = {
       "cat": "地形",
       "title": "水域优化",
       "body": "优化了两江流域的源头，为建筑让步",
+      "builders": [],
       "img": ""
     },
     {
@@ -295,8 +299,9 @@ window.MC_DATA = {
       "cat": "建筑",
       "title": "万象市政府成立",
       "body": "政府成立意味着这片土地最终确认，城市的发展以及各种指标将与统一管理",
+      "builders": [],
       "img": ""
     }
   ],
-  "rev": 1795489722904
+  "rev": 1795490826691
 };
