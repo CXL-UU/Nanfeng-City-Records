@@ -65,6 +65,7 @@
     </label>
     <label>标题<input type="text" id="lfTitle" maxlength="60" placeholder="这次的主题"></label>
     <label>正文（这次干了什么）<textarea id="lfBody" rows="4" placeholder="写下这次的进展、遇到的问题、用到的方块…"></textarea></label>
+    <div class="form-label">建造人员（可多选，也可不选）<div class="pick-list" id="lfBuilders"></div></div>
     <label>图片链接（可留空，留空则不显示图片）<input type="text" id="lfImg" placeholder="https://..."></label>
     <div id="lfMsg"></div>
     <div class="row">
@@ -72,6 +73,20 @@
       <button class="px-btn gray" type="button" id="lfCancel">取消</button>
     </div>
   </form>
+</div>
+
+<!-- 选择建造人员 -->
+<div id="pickModal" class="modal">
+  <div class="lock-card form-card glass" role="dialog" aria-label="选择建造人员">
+    <h2>👷 选择建造人员</h2>
+    <p class="pick-hint">可单选或多选，名单来自页面下方「人员规划」。</p>
+    <div class="pick-list" id="pickList"></div>
+    <div class="row">
+      <button class="px-btn" id="pickOk" type="button">确定</button>
+      <button class="px-btn gray" id="pickClear" type="button">清空</button>
+      <button class="px-btn gray" id="pickCancel" type="button">取消</button>
+    </div>
+  </div>
 </div>
 
 <!-- 密码锁 -->
@@ -308,6 +323,14 @@
       '<button class="swap-btn edit-only" data-act="swap" type="button">✎ 换图</button>' +
     '</div>';
   }
+  function buildersHTML(arr){
+    arr = Array.isArray(arr) ? arr : [];
+    return '<div class="builders' + (arr.length ? '' : ' empty') + '" data-builders="' + esc(JSON.stringify(arr)) + '">' +
+      '<span class="b-label">建造</span>' +
+      '<span class="b-list">' + arr.map(function(n){ return '<span class="b-chip">' + esc(n) + '</span>'; }).join('') + '</span>' +
+      '<button class="px-btn small gray edit-only" data-act="pick-builders" type="button">👷 选择建造人员</button>' +
+    '</div>';
+  }
   var CARD = {
     mod:{grid:'#modGrid', sel:'[data-type="mod"]', cats:['主力模组', '装饰模组', '材质光影']},
     gal:{grid:'#galGrid', sel:'[data-type="gal"]', cats:['单体建筑', '多体建筑', '建筑群', '地形', '道路', '轨道', '大型建筑群']}
@@ -323,7 +346,6 @@
     return '<article class="item glass" data-type="mod" data-cat="' + esc(cardCat('mod', m.cat)) + '">' +
       '<div class="tag-row">' + catChipHTML('mod', m.cat) + '</div>' +
       '<h3 data-edit contenteditable="false" data-f="name">' + esc(m.name || '模组名称') + '</h3>' +
-      '<p class="desc" data-edit contenteditable="false" data-f="desc">' + esc(m.desc || '') + '</p>' +
       '<label class="field"><span>组件码</span><input class="code" data-f="code" placeholder="选填，可留空" readonly value="' + esc(m.code || '') + '"></label>' +
       '<label class="field price"><span>售价</span><input class="price-in" data-f="price" placeholder="选填" readonly value="' + esc(m.price || '') + '"></label>' +
       '<button class="px-btn small danger edit-only" data-act="del" type="button">🗑 删除</button>' +
@@ -336,6 +358,7 @@
       '<div class="tag-row">' + catChipHTML('gal', g.cat) + '</div>' +
       '<h3 data-edit contenteditable="false" data-f="name">' + esc(g.name || '建筑名称') + '</h3>' +
       '<p class="desc" data-edit contenteditable="false" data-f="desc">' + esc(g.desc || '') + '</p>' +
+      buildersHTML(g.builders) +
       '<button class="px-btn small danger edit-only" data-act="del" type="button">🗑 删除</button>' +
     '</figure>';
   }
@@ -359,6 +382,7 @@
         '</div>' +
         '<h3 data-edit contenteditable="false">' + esc(o.title || '') + '</h3>' +
         '<p class="desc" data-edit contenteditable="false">' + esc(o.body || '') + '</p>' +
+        buildersHTML(o.builders) +
         (o.img ? logImgHTML(o.img) : '') +
         '<div class="tools edit-only">' +
           '<button class="px-btn small gray add-img" data-act="log-addimg" type="button">＋ 配图</button>' +
@@ -485,7 +509,6 @@
     d.mods = $$('#modGrid [data-type="mod"]').map(function(el){
       return {
         name: textOf($('[data-f="name"]', el)),
-        desc: textOf($('[data-f="desc"]', el)),
         cat: textOf($('.cat-chip', el)) || CARD.mod.cats[0],
         code: $('[data-f="code"]', el).value.trim(),
         price: $('[data-f="price"]', el).value.trim()
@@ -497,6 +520,7 @@
         name: textOf($('[data-f="name"]', el)),
         desc: textOf($('[data-f="desc"]', el)),
         cat: textOf($('.cat-chip', el)) || CARD.gal.cats[0],
+        builders: buildersOf(el),
         img: imgSrcOf(el)
       };
     });
@@ -522,6 +546,7 @@
         cat: cat ? textOf(cat) : '建筑',
         title: title ? textOf(title) : '',
         body: body ? textOf(body) : '',
+        builders: buildersOf(it),
         img: img ? (img.getAttribute('src') || '') : ''
       };
     });
@@ -686,6 +711,59 @@
     else if(e.key === 'ArrowRight') lbShow(lbIdx + 1);
   });
 
+  /* ============ 建造人员选择（名单取自「人员规划」） ============ */
+  var pickModal = $('#pickModal'), pickTarget = null;
+  function teamList(){
+    return $$('#teamGrid [data-type="member"]').map(function(m){
+      return {name: textOf($('[data-f="name"]', m)), role: textOf($('[data-f="role"]', m))};
+    }).filter(function(x){ return x.name; });
+  }
+  function currentBuilders(el){
+    try{ var a = JSON.parse(el.getAttribute('data-builders') || '[]'); return Array.isArray(a) ? a : []; }
+    catch(e){ return []; }
+  }
+  function buildersOf(root){ var b = $('.builders', root); return b ? currentBuilders(b) : []; }
+  function setBuilders(el, arr){
+    el.setAttribute('data-builders', JSON.stringify(arr));
+    $('.b-list', el).innerHTML = arr.map(function(n){ return '<span class="b-chip">' + esc(n) + '</span>'; }).join('');
+    el.classList.toggle('empty', !arr.length);
+  }
+  function fillPickList(box, selected){
+    selected = selected || [];
+    box.innerHTML = '';
+    var list = teamList(), names = list.map(function(x){ return x.name; });
+    selected.forEach(function(n){ if(names.indexOf(n) < 0) list.push({name:n, role:'（已不在人员名单中）'}); });
+    if(!list.length){ box.textContent = '人员规划里还没有成员，请先在页面下方添加。'; return; }
+    list.forEach(function(m){
+      var l = document.createElement('label'); l.className = 'pick-item';
+      var i = document.createElement('input'); i.type = 'checkbox'; i.value = m.name; i.checked = selected.indexOf(m.name) >= 0;
+      var t = document.createElement('span'); t.className = 'pi-t';
+      var a = document.createElement('b'); a.textContent = m.name;
+      var r = document.createElement('small'); r.textContent = m.role;
+      t.appendChild(a); t.appendChild(r); l.appendChild(i); l.appendChild(t);
+      l.classList.toggle('on', i.checked);
+      i.addEventListener('change', function(){ l.classList.toggle('on', i.checked); });
+      box.appendChild(l);
+    });
+  }
+  function readPickList(box){ return $$('input:checked', box).map(function(i){ return i.value; }); }
+  function openPicker(el){
+    pickTarget = el;
+    fillPickList($('#pickList'), currentBuilders(el));
+    pickModal.classList.add('open');
+  }
+  function closePicker(){ pickModal.classList.remove('open'); pickTarget = null; }
+  $('#pickOk').addEventListener('click', function(){
+    if(pickTarget){ setBuilders(pickTarget, readPickList($('#pickList'))); toast('✓ 建造人员已更新'); }
+    closePicker();
+  });
+  $('#pickClear').addEventListener('click', function(){
+    $$('#pickList input').forEach(function(i){ i.checked = false; i.closest('.pick-item').classList.remove('on'); });
+  });
+  $('#pickCancel').addEventListener('click', closePicker);
+  pickModal.addEventListener('click', function(e){ if(e.target === pickModal) closePicker(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && pickModal.classList.contains('open')) closePicker(); });
+
   /* ============ 点击（主） ============ */
   document.addEventListener('click', function(e){
     if(lbOpen()){ lbClick(e); return; }
@@ -717,6 +795,8 @@
     }else if(act === 'add-member'){ addItem('#teamGrid', tplMember());
     }else if(act === 'del'){
       if(confirm('确定删除这一项吗？')){ btn.closest('.item').remove(); renderStats(false); renderCards('mod'); renderCards('gal'); }
+    }else if(act === 'pick-builders'){
+      openPicker(btn.closest('.builders'));
     }else if(act === 'card-cat'){
       var gk = btn.getAttribute('data-g'), cs = CARD[gk].cats;
       var ci = (cs.indexOf(btn.textContent.trim()) + 1) % cs.length;
@@ -974,7 +1054,7 @@
   }
   function openLogForm(){
     $('#lfDate').value = todayStr(); $('#lfStage').value = ''; $('#lfCat').value = CATS[0];
-    $('#lfTitle').value = ''; $('#lfBody').value = ''; $('#lfImg').value = ''; $('#lfMsg').textContent = '';
+    $('#lfTitle').value = ''; $('#lfBody').value = ''; $('#lfImg').value = ''; $('#lfMsg').textContent = ''; fillPickList($('#lfBuilders'), []);
     modal.classList.add('open');
     setTimeout(function(){ $('#lfTitle').focus(); }, 60);
   }
@@ -989,7 +1069,7 @@
     if(!title){ $('#lfMsg').textContent = '请填写标题'; $('#lfTitle').focus(); return; }
     var o = {
       date: $('#lfDate').value || todayStr(), stage: $('#lfStage').value.trim(), cat: $('#lfCat').value,
-      title: title, body: $('#lfBody').value.trim() || '（暂无正文）', img: $('#lfImg').value.trim()
+      title: title, body: $('#lfBody').value.trim() || '（暂无正文）', builders: readPickList($('#lfBuilders')), img: $('#lfImg').value.trim()
     };
     var tl = $('#tl');
     if(curFilter !== 'all' && curFilter !== o.cat) curFilter = 'all';
