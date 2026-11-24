@@ -61,7 +61,7 @@
     <label>日期<input type="date" id="lfDate"></label>
     <label>版本号 / 阶段标签<input type="text" id="lfStage" maxlength="30" placeholder="如 v0.3 主体结构"></label>
     <label>分类
-      <select id="lfCat"><option>建筑</option><option>红石</option><option>地形</option><option>优化</option></select>
+      <select id="lfCat"><option>建筑</option><option>轨道交通</option><option>道路</option><option>地形</option><option>优化</option></select>
     </label>
     <label>标题<input type="text" id="lfTitle" maxlength="60" placeholder="这次的主题"></label>
     <label>正文（这次干了什么）<textarea id="lfBody" rows="4" placeholder="写下这次的进展、遇到的问题、用到的方块…"></textarea></label>
@@ -171,6 +171,12 @@
         <h2><span class="en" data-bind="sectionTitles.mods.en"></span><span data-bind="sectionTitles.mods.title" data-edit contenteditable="false"></span></h2>
         <button class="px-btn small edit-only" data-act="add-mod" type="button">＋ 添加模组</button>
       </div>
+      <div class="tl-filters" data-g="mod">
+        <button class="chip active" data-act="filter" data-f="all" type="button">全部</button>
+        <button class="chip" data-act="filter" data-f="主力模组" type="button">主力模组</button>
+        <button class="chip" data-act="filter" data-f="装饰模组" type="button">装饰模组</button>
+        <button class="chip" data-act="filter" data-f="材质光影" type="button">材质光影</button>
+      </div>
       <div class="grid" id="modGrid"></div>
     </section>
 
@@ -178,6 +184,16 @@
       <div class="sec-title">
         <h2><span class="en" data-bind="sectionTitles.gallery.en"></span><span data-bind="sectionTitles.gallery.title" data-edit contenteditable="false"></span></h2>
         <button class="px-btn small edit-only" data-act="add-gal" type="button">＋ 添加作品</button>
+      </div>
+      <div class="tl-filters" data-g="gal">
+        <button class="chip active" data-act="filter" data-f="all" type="button">全部</button>
+        <button class="chip" data-act="filter" data-f="单体建筑" type="button">单体建筑</button>
+        <button class="chip" data-act="filter" data-f="多体建筑" type="button">多体建筑</button>
+        <button class="chip" data-act="filter" data-f="建筑群" type="button">建筑群</button>
+        <button class="chip" data-act="filter" data-f="地形" type="button">地形</button>
+        <button class="chip" data-act="filter" data-f="道路" type="button">道路</button>
+        <button class="chip" data-act="filter" data-f="轨道" type="button">轨道</button>
+        <button class="chip" data-act="filter" data-f="大型建筑群" type="button">大型建筑群</button>
       </div>
       <div class="grid" id="galGrid"></div>
     </section>
@@ -188,10 +204,11 @@
         <button class="px-btn small edit-only" data-act="add-log" type="button">＋ 添加日志</button>
         <button class="px-btn small gray edit-only" data-act="log-sort" type="button">⇅ 按日期排序</button>
       </div>
-      <div class="tl-filters">
+      <div class="tl-filters" data-g="log">
         <button class="chip active" data-act="filter" data-f="all" type="button">全部</button>
         <button class="chip" data-act="filter" data-f="建筑" type="button">建筑</button>
-        <button class="chip" data-act="filter" data-f="红石" type="button">红石</button>
+        <button class="chip" data-act="filter" data-f="轨道交通" type="button">轨道交通</button>
+        <button class="chip" data-act="filter" data-f="道路" type="button">道路</button>
         <button class="chip" data-act="filter" data-f="地形" type="button">地形</button>
         <button class="chip" data-act="filter" data-f="优化" type="button">优化</button>
       </div>
@@ -291,20 +308,32 @@
       '<button class="swap-btn edit-only" data-act="swap" type="button">✎ 换图</button>' +
     '</div>';
   }
+  var CARD = {
+    mod:{grid:'#modGrid', sel:'[data-type="mod"]', cats:['主力模组', '装饰模组', '材质光影']},
+    gal:{grid:'#galGrid', sel:'[data-type="gal"]', cats:['单体建筑', '多体建筑', '建筑群', '地形', '道路', '轨道', '大型建筑群']}
+  };
+  var cardFilter = {mod:'all', gal:'all'};
+  function cardCat(g, c){ var cs = CARD[g].cats; return cs.indexOf(c) < 0 ? cs[0] : c; }
+  function catChipHTML(g, c){
+    c = cardCat(g, c);
+    return '<button class="cat-chip" data-act="card-cat" data-g="' + g + '" data-c="' + esc(c) + '" type="button" title="编辑模式下点击切换分类">' + esc(c) + '</button>';
+  }
   function tplMod(m){
     m = m || {};
-    return '<article class="item glass" data-type="mod">' +
+    return '<article class="item glass" data-type="mod" data-cat="' + esc(cardCat('mod', m.cat)) + '">' +
+      '<div class="tag-row">' + catChipHTML('mod', m.cat) + '</div>' +
       '<h3 data-edit contenteditable="false" data-f="name">' + esc(m.name || '模组名称') + '</h3>' +
       '<p class="desc" data-edit contenteditable="false" data-f="desc">' + esc(m.desc || '') + '</p>' +
-      '<label class="field"><span>组件码</span><input class="code" data-f="code" placeholder="待填写" readonly value="' + esc(m.code || '') + '"></label>' +
-      '<label class="field price"><span>售价</span><input class="price-in" data-f="price" placeholder="¥ 0.00" readonly value="' + esc(m.price || '') + '"></label>' +
+      '<label class="field"><span>组件码</span><input class="code" data-f="code" placeholder="选填，可留空" readonly value="' + esc(m.code || '') + '"></label>' +
+      '<label class="field price"><span>售价</span><input class="price-in" data-f="price" placeholder="选填" readonly value="' + esc(m.price || '') + '"></label>' +
       '<button class="px-btn small danger edit-only" data-act="del" type="button">🗑 删除</button>' +
     '</article>';
   }
   function tplGal(g){
     g = g || {};
-    return '<figure class="item glass" data-type="gal">' +
+    return '<figure class="item glass" data-type="gal" data-cat="' + esc(cardCat('gal', g.cat)) + '">' +
       imgWrapHTML('', '建筑截图', g.img) +
+      '<div class="tag-row">' + catChipHTML('gal', g.cat) + '</div>' +
       '<h3 data-edit contenteditable="false" data-f="name">' + esc(g.name || '建筑名称') + '</h3>' +
       '<p class="desc" data-edit contenteditable="false" data-f="desc">' + esc(g.desc || '') + '</p>' +
       '<button class="px-btn small danger edit-only" data-act="del" type="button">🗑 删除</button>' +
@@ -365,9 +394,39 @@
     }
 
     $$('.img-wrap img').forEach(syncImg);
+    renderCards('mod'); renderCards('gal');
     applyEditingState();
     applyReveal();
     $$('.tl-card').forEach(function(c, i){ prep(c, (i % 5) * 80); });
+  }
+
+  /* 模组 / 作品：分类筛选 */
+  function renderCards(g, replay){
+    var c = CARD[g], grid = $(c.grid); if(!grid) return;
+    var items = $$(c.sel, grid), f = cardFilter[g];
+    items.forEach(function(it){
+      var chip = $('.cat-chip', it), cat = chip ? chip.textContent.trim() : '';
+      it.setAttribute('data-cat', cat);
+      it.hidden = !(f === 'all' || cat === f);
+    });
+    var vis = items.filter(function(it){ return !it.hidden; });
+    grid.setAttribute('data-empty', vis.length ? '0' : '1');
+    $$('.tl-filters[data-g="' + g + '"] .chip').forEach(function(ch){
+      var ff = ch.getAttribute('data-f');
+      ch.classList.toggle('active', ff === f);
+      ch.setAttribute('data-n', ff === 'all' ? items.length : items.filter(function(it){ return it.getAttribute('data-cat') === ff; }).length);
+    });
+    if(replay){
+      vis.forEach(function(it, i){
+        it.style.setProperty('--d', ((i % 8) * 60) + 'ms');
+        it.classList.add('reveal'); it.classList.remove('in'); void it.offsetWidth; it.classList.add('in');
+      });
+    }
+  }
+  function syncEmpty(){
+    $$('#modGrid .field').forEach(function(f){
+      var i = $('input', f); f.classList.toggle('empty', !(i && i.value.trim()));
+    });
   }
 
   function renderSplit(id, s){
@@ -398,7 +457,7 @@
     // 临时显示所有日志项，确保 innerText 能取到换行
     var tl = $('#tl');
     var hiddenState = [];
-    if(tl) $$('.tl-item', tl).forEach(function(it){ hiddenState.push([it, it.hidden]); it.hidden = false; });
+    $$('.tl-item, #modGrid .item, #galGrid .item').forEach(function(it){ hiddenState.push([it, it.hidden]); it.hidden = false; });
 
     $$('[data-bind]').forEach(function(el){
       setPath(d, el.getAttribute('data-bind'), textOf(el));
@@ -427,8 +486,9 @@
       return {
         name: textOf($('[data-f="name"]', el)),
         desc: textOf($('[data-f="desc"]', el)),
-        code: $('[data-f="code"]', el).value,
-        price: $('[data-f="price"]', el).value
+        cat: textOf($('.cat-chip', el)) || CARD.mod.cats[0],
+        code: $('[data-f="code"]', el).value.trim(),
+        price: $('[data-f="price"]', el).value.trim()
       };
     });
 
@@ -436,6 +496,7 @@
       return {
         name: textOf($('[data-f="name"]', el)),
         desc: textOf($('[data-f="desc"]', el)),
+        cat: textOf($('.cat-chip', el)) || CARD.gal.cats[0],
         img: imgSrcOf(el)
       };
     });
@@ -516,6 +577,7 @@
     document.body.classList.toggle('editing', editing);
     $$('[data-edit]').forEach(function(el){ el.setAttribute('contenteditable', editing ? 'true' : 'false'); });
     $$('.field input').forEach(function(i){ i.readOnly = !editing; });
+    syncEmpty();
     var b = $('#authBtn'); if(b) b.textContent = editing ? '🔓 退出编辑' : '🔑';
   }
   function setEditing(on){
@@ -551,6 +613,10 @@
   $('#authBtn').addEventListener('click', function(){
     if(editing){ setEditing(false); toast('已退出编辑，当前为只读模式'); }
     else{ lock.classList.remove('hide'); setTimeout(function(){pwd.focus()},50); }
+  });
+
+  document.addEventListener('input', function(e){
+    if(e.target.closest && e.target.closest('#modGrid .field')) syncEmpty();
   });
 
   /* ============ 粘贴纯文本 ============ */
@@ -594,7 +660,7 @@
     lbCount.textContent = lbList.length > 1 ? (lbIdx + 1) + ' / ' + lbList.length : '';
   }
   function openLB(img){
-    var scope = img.closest('#galGrid') ? '#galGrid .img-wrap img'
+    var scope = img.closest('#galGrid') ? '#galGrid .item:not([hidden]) .img-wrap img'
               : img.closest('#tl') ? '#tl .tl-item:not([hidden]) .img-wrap img' : null;
     lbList = scope ? $$(scope).filter(function(m){ return m.getAttribute('src'); }) : [img];
     lbShow(Math.max(0, lbList.indexOf(img)));
@@ -650,7 +716,11 @@
     }else if(act === 'add-gal'){ addItem('#galGrid', tplGal());
     }else if(act === 'add-member'){ addItem('#teamGrid', tplMember());
     }else if(act === 'del'){
-      if(confirm('确定删除这一项吗？')){ btn.closest('.item').remove(); renderStats(false); }
+      if(confirm('确定删除这一项吗？')){ btn.closest('.item').remove(); renderStats(false); renderCards('mod'); renderCards('gal'); }
+    }else if(act === 'card-cat'){
+      var gk = btn.getAttribute('data-g'), cs = CARD[gk].cats;
+      var ci = (cs.indexOf(btn.textContent.trim()) + 1) % cs.length;
+      btn.textContent = cs[ci]; btn.setAttribute('data-c', cs[ci]); renderCards(gk);
     }else if(act === 'save'){ saveDraft();
     }else if(act === 'export-js'){ exportDataJS();
     }else if(act === 'bg'){
@@ -664,6 +734,8 @@
 
   function addItem(sel, html){
     var g = $(sel); g.insertAdjacentHTML('beforeend', html);
+    var kind = sel === '#modGrid' ? 'mod' : sel === '#galGrid' ? 'gal' : null;
+    if(kind){ cardFilter[kind] = 'all'; renderCards(kind); }
     setEditing(true);
     var el = g.lastElementChild;
     prep(el, 0);
@@ -836,7 +908,7 @@
   }
 
   /* ============ 日志 ============ */
-  var CATS = ['建筑','红石','地形','优化'];
+  var CATS = ['建筑', '轨道交通', '道路', '地形', '优化'];
   var curFilter = 'all';
 
   function getLogDate(it){
@@ -869,7 +941,7 @@
     all.forEach(function(it){ it.classList.remove('last'); });
     if(vis.length) vis[vis.length - 1].classList.add('last');
     tl.setAttribute('data-empty', vis.length ? '0' : '1');
-    $$('.tl-filters .chip').forEach(function(c){
+    $$('.tl-filters[data-g="log"] .chip').forEach(function(c){
       var f = c.getAttribute('data-f');
       c.classList.toggle('active', f === curFilter);
       c.setAttribute('data-n', f === 'all' ? n : all.filter(function(it){ return it.getAttribute('data-cat') === f; }).length);
@@ -941,7 +1013,12 @@
       return;
     }
     var act = b.getAttribute('data-act');
-    if(act === 'filter'){ curFilter = b.getAttribute('data-f'); renderLog(); replayLog(); return; }
+    if(act === 'filter'){
+      var grp = b.closest('.tl-filters').getAttribute('data-g');
+      if(grp === 'log'){ curFilter = b.getAttribute('data-f'); renderLog(); replayLog(); }
+      else { cardFilter[grp] = b.getAttribute('data-f'); renderCards(grp, true); }
+      return;
+    }
     if(!editing) return;
     var it = b.closest('.tl-item');
     if(act === 'add-log'){ openLogForm(); }
