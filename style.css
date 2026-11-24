@@ -522,7 +522,7 @@ body.editing .hero p.typing::before,body.editing .hero p.typing::after{display:n
   background:#555;box-shadow:inset -2px -2px 0 rgba(0,0,0,.35),inset 2px 2px 0 rgba(255,255,255,.3);
 }
 .cat-chip[data-c="建筑"]{background:#b8860b}
-.cat-chip[data-c="红石"]{background:#a33}
+.cat-chip[data-c="轨道交通"],.cat-chip[data-c="轨道"]{background:#a33}
 .cat-chip[data-c="地形"]{background:#4f7a2a}
 .cat-chip[data-c="优化"]{background:#2f6fb5}
 body.editing .cat-chip{cursor:pointer}
@@ -738,3 +738,20 @@ html[data-theme="day"] .team .role{background:rgba(255,255,255,.5)}
 @media (max-width:420px){
   #modGrid,#teamGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+
+/* —— 分类标签：模组 / 作品 / 日志共用 —— */
+.cat-chip[data-c="单体建筑"]{background:#b8860b}
+.cat-chip[data-c="多体建筑"]{background:#a8622a}
+.cat-chip[data-c="建筑群"]{background:#7b4fb0}
+.cat-chip[data-c="大型建筑群"]{background:#c2417a}
+.cat-chip[data-c="道路"]{background:#5a6275}
+.cat-chip[data-c="主力模组"]{background:#b8860b}
+.cat-chip[data-c="装饰模组"]{background:#2f6fb5}
+.cat-chip[data-c="材质光影"]{background:#7b4fb0}
+.tag-row{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center}
+.item[hidden]{display:none!important}
+.grid[data-empty="1"]::after{content:"该分类下暂无内容";grid-column:1/-1;padding:1rem .2rem;color:var(--muted)}
+/* 组件码 / 售价留空时，前台不显示这一行（编辑模式仍可填写） */
+body:not(.editing) .field.empty{display:none}
+.tl-filters .chip{white-space:nowrap}
