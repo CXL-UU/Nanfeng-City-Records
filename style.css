@@ -12,8 +12,8 @@
 html{scroll-behavior:smooth}
 body{
   font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
-  color:var(--text);background:#0a0e16;line-height:1.7;min-height:100vh;
-  -webkit-text-size-adjust:100%;
+  color:var(--text);background:#0a0e16;line-height:1.7;min-height:100vh;min-height:100dvh;
+  -webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;
 }
 /* ===== 背景 ===== */
 .bg{
@@ -23,7 +23,7 @@ body{
   background-size:cover;background-position:center;
 }
 .bg::after{
-  content:"";position:absolute;inset:0;
+  content:"";position:absolute;inset:-32px;
   background-image:
     linear-gradient(rgba(255,255,255,.035) 2px,transparent 2px),
     linear-gradient(90deg,rgba(255,255,255,.035) 2px,transparent 2px);
@@ -135,21 +135,18 @@ section{padding:1.6rem 0;scroll-margin-top:80px}
 .img-wrap img[src=""],.img-wrap.broken img{visibility:hidden}
 .img-wrap.broken::before{content:"图片加载失败\A请检查 src 链接";color:#e88}
 
-.copy-btn,.swap-btn{
-  position:absolute;z-index:3;top:8px;
+.swap-btn{
+  position:absolute;z-index:3;top:8px;left:8px;
   font-family:inherit;font-size:.72rem;font-weight:700;color:#fff;cursor:pointer;
   padding:.3rem .55rem;border:2px solid #000;border-radius:0;
   background:rgba(20,26,40,.82);
   -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
   box-shadow:inset -2px -2px 0 rgba(0,0,0,.4),inset 2px 2px 0 rgba(255,255,255,.25);
-  opacity:0;transition:opacity .15s;
+  opacity:0;
 }
-.copy-btn{right:8px}
-.swap-btn{left:8px}
-.img-wrap:hover .copy-btn,.img-wrap:hover .swap-btn,.copy-btn:focus,.swap-btn:focus{opacity:1}
-.copy-btn:hover{background:var(--accent-d)}
+.img-wrap:hover .swap-btn,.swap-btn:focus{opacity:1}
 .swap-btn:hover{background:#b8860b}
-@media (hover:none){.copy-btn,.swap-btn{opacity:.92}}
+@media (hover:none){.swap-btn{opacity:.92}}
 
 /* 网格 */
 .grid{display:grid;gap:1.2rem}
@@ -186,8 +183,7 @@ body.editing .edit-only{display:inline-flex}
 body.editing .tools.edit-only{display:flex}
 body.editing [data-edit]{outline:1px dashed rgba(255,210,74,.45);outline-offset:2px;cursor:text}
 body.editing [data-edit]:focus{outline:2px solid var(--gold);background:rgba(255,255,255,.05)}
-body.editing .img-wrap .copy-btn,body.editing .img-wrap .swap-btn{opacity:.95}
-body.editing .copy-btn{top:8px}
+body.editing .img-wrap .swap-btn{opacity:.95}
 body.editing .swap-btn{display:block}
 [data-edit]{caret-color:var(--gold)}
 
@@ -200,7 +196,7 @@ body.editing #toolbar{display:flex}
 #authBtn{
   position:fixed;right:10px;bottom:10px;z-index:81;
   width:30px;height:30px;padding:0;justify-content:center;
-  font-size:.8rem;opacity:.18;transition:opacity .2s;
+  font-size:.8rem;opacity:.18;
 }
 #authBtn:hover,#authBtn:focus{opacity:1}
 body.editing #authBtn{bottom:auto;top:70px;width:auto;height:auto;padding:.3rem .6rem;opacity:1}
@@ -212,7 +208,7 @@ footer{text-align:center;color:var(--muted);font-size:.82rem;padding:1.5rem 1rem
   position:fixed;left:50%;top:84px;transform:translate(-50%,-20px);z-index:200;
   background:#1f7a1f;color:#fff;font-weight:700;padding:.55rem 1.1rem;border:2px solid #000;
   box-shadow:4px 4px 0 rgba(0,0,0,.5),inset -3px -3px 0 rgba(0,0,0,.3),inset 3px 3px 0 rgba(255,255,255,.3);
-  opacity:0;pointer-events:none;transition:.25s;max-width:90vw;text-align:center;
+  opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;max-width:90vw;text-align:center;
 }
 #toast.show{opacity:1;transform:translate(-50%,0)}
 #toast.err{background:#9a2a2a}
@@ -285,11 +281,11 @@ body{overflow-x:hidden}
     radial-gradient(40% 35% at 20% 30%,rgba(93,211,93,.26),transparent 70%),
     radial-gradient(35% 40% at 80% 20%,rgba(80,160,255,.26),transparent 70%),
     radial-gradient(40% 40% at 60% 85%,rgba(255,210,74,.16),transparent 70%);
-  animation:aurora 22s ease-in-out infinite alternate;
+  animation:aurora 22s ease-in-out infinite alternate;will-change:transform;
 }
-.bg::after{animation:gridMove 24s linear infinite}
+.bg::after{animation:gridMove 24s linear infinite;will-change:transform}
 @keyframes aurora{to{transform:translate3d(5%,4%,0) scale(1.12) rotate(3deg)}}
-@keyframes gridMove{to{background-position:32px 32px,32px 32px}}
+@keyframes gridMove{to{transform:translate3d(32px,32px,0)}}
 
 /* —— 滚动进度条 / 回到顶部 —— */
 #progress{
@@ -298,31 +294,34 @@ body{overflow-x:hidden}
   background:repeating-linear-gradient(90deg,#5dd35d 0 8px,#8cf08c 8px 16px);
   box-shadow:0 0 8px rgba(93,211,93,.8);
 }
-.px-btn{position:relative;overflow:hidden;transition:transform .12s,background .2s}
+.px-btn{position:relative;overflow:hidden;transition:transform .12s}
 .px-btn::after{
   content:"";position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(100deg,transparent 35%,rgba(255,255,255,.38) 50%,transparent 65%);
   transform:translateX(-130%);
 }
-.px-btn:hover{transform:translateY(-2px)}
-.px-btn:hover::after{transform:translateX(130%);transition:transform .6s}
+@media (hover:hover){
+  .px-btn:hover{transform:translateY(-2px)}
+  .px-btn:hover::after{transform:translateX(130%);transition:transform .6s}
+}
 .px-btn:active{transform:translateY(2px)}
 .to-top{
   position:fixed;right:10px;bottom:52px;z-index:79;width:36px;height:36px;padding:0;justify-content:center;
-  opacity:0;transform:translateY(14px);pointer-events:none;transition:opacity .3s,transform .3s;
+  opacity:0;transform:translateY(14px);pointer-events:none;transition:opacity .3s,transform .3s;will-change:transform,opacity;
 }
 .to-top.show{opacity:1;transform:none;pointer-events:auto}
-.to-top.show:hover{transform:translateY(-3px)}
+@media (hover:hover){.to-top.show:hover{transform:translateY(-3px)}}
 body.editing .to-top{bottom:auto;top:112px}
 
 /* —— 导航 —— */
-header.top{transition:padding .3s,box-shadow .3s}
-header.top.scrolled{padding:.4rem 1.2rem;box-shadow:0 6px 0 rgba(0,0,0,.35)}
-.logo{transition:width .3s,height .3s}
-header.top.scrolled .logo{width:34px;height:34px}
+header.top::after{
+  content:"";position:absolute;left:0;right:0;bottom:-6px;height:6px;pointer-events:none;
+  background:rgba(0,0,0,.35);opacity:0;transition:opacity .3s;
+}
+header.top.scrolled::after{opacity:1}
 .brand:hover .logo{animation:wiggle .5s steps(4)}
 @keyframes wiggle{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
-nav.menu a{position:relative;transition:color .2s,background .2s}
+nav.menu a{position:relative}
 nav.menu a::after{
   content:"";position:absolute;left:.7rem;right:.7rem;bottom:2px;height:3px;background:var(--accent);
   transform:scaleX(0);transform-origin:left;transition:transform .25s steps(5);
@@ -349,12 +348,11 @@ nav.menu a.active{color:var(--gold);background:rgba(255,210,74,.09)}
 @keyframes twinkle{50%{opacity:.25}}
 .hero .logo.big{animation:float 3.6s ease-in-out infinite}
 @keyframes float{50%{transform:translateY(-9px)}}
-.hero h2{animation:glow 3.5s ease-in-out infinite}
-@keyframes glow{50%{text-shadow:4px 4px 0 #1b5e20,8px 8px 0 rgba(0,0,0,.4),0 0 24px rgba(255,255,255,.4)}}
 .pixel-tag::after{content:"_";animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
-.hero .go .px-btn:first-child{animation:glowPulse 2.4s ease-in-out infinite}
-@keyframes glowPulse{50%{filter:drop-shadow(0 0 10px rgba(93,211,93,.85))}}
+.hero .go .px-btn:first-child{animation:pulse 2.4s ease-in-out infinite}
+.hero .go .px-btn:first-child:hover{animation:none}
+@keyframes pulse{50%{transform:scale(1.05)}}
 .stats{display:flex;justify-content:center;gap:.8rem;flex-wrap:wrap;margin-top:1.5rem}
 .stats div{
   min-width:100px;padding:.55rem 1rem;border:2px solid var(--stroke);background:rgba(0,0,0,.28);
@@ -385,49 +383,49 @@ nav.menu a.active{color:var(--gold);background:rgba(255,210,74,.09)}
     linear-gradient(var(--accent),var(--accent)) 0 100%/8px 8px no-repeat,
     linear-gradient(var(--accent),var(--accent)) 100% 100%/8px 8px no-repeat;
 }
-.item:hover::after{opacity:1}
+@media (hover:hover){.item:hover::after{opacity:1}}
 
 /* —— 标题装饰 —— */
 .sec-title{position:relative;padding-bottom:.8rem}
 .sec-title::after{
-  content:"";position:absolute;left:0;bottom:0;height:4px;width:100%;opacity:.75;
+  content:"";position:absolute;left:0;bottom:0;height:4px;width:100%;opacity:.75;transform-origin:left;
   background:repeating-linear-gradient(90deg,var(--accent) 0 12px,transparent 12px 16px);
 }
 .sec-title.in::after{animation:grow 1s steps(24) backwards}
-@keyframes grow{from{width:0}}
+@keyframes grow{from{transform:scaleX(0)}}
 .sec-title::before{animation:bob 2.6s steps(4) infinite}
 @keyframes bob{50%{transform:translateY(-3px)}}
 
-/* —— 卡片：聚光灯 / 悬浮 / 倾斜 —— */
+/* —— 卡片：聚光灯 / 悬浮 / 倾斜（只动画 transform / opacity） —— */
 .item>*,.split>*{position:relative;z-index:1}
 .item .del{position:static}
 .item::before,.split::before{
   content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:0;transition:opacity .3s;
   background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.16),transparent 60%);
 }
-.item:hover::before,.split:hover::before{opacity:1}
-.item{transition:transform .25s ease-out,box-shadow .25s,border-color .25s}
-.item:hover{transform:translateY(-6px);border-color:rgba(93,211,93,.7);box-shadow:8px 12px 0 rgba(0,0,0,.5),0 0 26px rgba(93,211,93,.25)}
-.split{transition:border-color .25s,box-shadow .25s}
-.split:hover{border-color:rgba(255,255,255,.34);box-shadow:8px 8px 0 rgba(0,0,0,.5)}
+.item{transition:transform .25s ease-out}
+@media (hover:hover){
+  .item:hover::before,.split:hover::before{opacity:1}
+  .item:hover{transform:translateY(-6px);border-color:rgba(93,211,93,.7);box-shadow:8px 12px 0 rgba(0,0,0,.5),0 0 26px rgba(93,211,93,.25)}
+  .split:hover{border-color:rgba(255,255,255,.34);box-shadow:8px 8px 0 rgba(0,0,0,.5)}
+}
 
-/* —— 图片：缩放 / 扫光 / 占位流动 —— */
-.img-wrap{animation:checker 8s linear infinite;transition:border-color .25s}
-@keyframes checker{to{background-position:48px 24px}}
+/* —— 图片：缩放 / 扫光 —— */
 .img-wrap img{transition:transform .7s cubic-bezier(.2,.7,.2,1)}
-.item:hover .img-wrap img,.split:hover .img-wrap img{transform:scale(1.07)}
-.item:hover .img-wrap{border-color:var(--accent)}
 .img-wrap::after{
   content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
   background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);
   transform:translateX(-130%);
 }
-.item:hover .img-wrap::after,.split:hover .img-wrap::after{animation:sweep .9s ease}
 @keyframes sweep{to{transform:translateX(130%)}}
-.copy-btn,.swap-btn{transform:translateY(-6px);transition:opacity .15s,transform .2s,background .15s}
-.img-wrap:hover .copy-btn,.img-wrap:hover .swap-btn,.copy-btn:focus,.swap-btn:focus{transform:none}
-.copy-btn.ok{background:var(--accent-d);opacity:1;transform:none}
-@media (hover:none){.copy-btn,.swap-btn{transform:none}}
+@media (hover:hover){
+  .item:hover .img-wrap img,.split:hover .img-wrap img{transform:scale(1.07)}
+  .item:hover .img-wrap{border-color:var(--accent)}
+  .item:hover .img-wrap::after,.split:hover .img-wrap::after{animation:sweep .9s ease}
+}
+.swap-btn{transform:translateY(-6px);transition:opacity .15s,transform .2s}
+.img-wrap:hover .swap-btn,.swap-btn:focus{transform:none}
+@media (hover:none){.swap-btn{transform:none}}
 body:not(.editing) #galGrid .img-wrap img{cursor:zoom-in}
 
 /* —— 页脚草地 —— */
@@ -449,8 +447,6 @@ footer::before{
 
 /* —— 手机 —— */
 @media (max-width:760px){
-  header.top.scrolled{padding:.35rem .8rem}
-  header.top.scrolled .brand .sub{display:none}
   .stats div{min-width:84px;padding:.45rem .7rem}
   .stats b{font-size:1rem}
 }
@@ -473,7 +469,7 @@ body.editing .hero p.typing::before,body.editing .hero p.typing::after{display:n
 /* —— 图片：像素占位 + 加载后淡入 —— */
 .js .img-wrap img{opacity:0;transform:scale(1.06);transition:transform .7s cubic-bezier(.2,.7,.2,1),opacity .6s ease}
 .js .img-wrap.ld img{opacity:1;transform:none}
-.item:hover .img-wrap.ld img,.split:hover .img-wrap.ld img{transform:scale(1.07)}
+@media (hover:hover){.item:hover .img-wrap.ld img,.split:hover .img-wrap.ld img{transform:scale(1.07)}}
 .img-wrap.loading::before{content:"LOADING…";animation:blink 1s steps(1) infinite}
 
 /* —— 建造日志 —— */
@@ -481,10 +477,10 @@ body.editing .hero p.typing::before,body.editing .hero p.typing::after{display:n
 .chip{
   font:inherit;font-size:.85rem;font-weight:700;color:var(--text);cursor:pointer;padding:.35rem .8rem;
   background:rgba(0,0,0,.25);border:2px solid var(--stroke);border-radius:0;box-shadow:3px 3px 0 rgba(0,0,0,.35);
-  transition:transform .12s,background .2s,border-color .2s;
+  transition:transform .12s;
 }
 .chip::after{content:attr(data-n);margin-left:.45rem;font-family:var(--pixel-font);font-size:.55rem;color:var(--gold)}
-.chip:hover{transform:translateY(-2px);border-color:var(--accent)}
+@media (hover:hover){.chip:hover{transform:translateY(-2px);border-color:var(--accent)}}
 .chip.active{background:var(--accent-d);color:#fff;border-color:#0b1a0b;
   box-shadow:inset -3px -3px 0 rgba(0,0,0,.35),inset 3px 3px 0 rgba(255,255,255,.3),3px 3px 0 rgba(0,0,0,.35)}
 .chip.active::after{color:#fff}
@@ -584,7 +580,7 @@ html[data-theme="day"] .glass{
   background:linear-gradient(135deg,rgba(255,255,255,.55),rgba(255,255,255,.1) 45%),var(--glass);
   box-shadow:6px 6px 0 rgba(20,50,80,.22),inset 0 0 0 2px rgba(255,255,255,.45);
 }
-html[data-theme="day"] .item:hover{box-shadow:8px 12px 0 rgba(20,50,80,.25),0 0 26px rgba(93,211,93,.3)}
+@media (hover:hover){html[data-theme="day"] .item:hover{box-shadow:8px 12px 0 rgba(20,50,80,.25),0 0 26px rgba(93,211,93,.3)}}
 html[data-theme="day"] .split .text p,html[data-theme="day"] .split .text li,html[data-theme="day"] .item .desc{color:var(--text)}
 html[data-theme="day"] .sec-title h2,html[data-theme="day"] .item h3,html[data-theme="day"] .split .text h3,
 html[data-theme="day"] .hero .pixel-tag,html[data-theme="day"] .lock-card h2,html[data-theme="day"] .sec-title .en,
@@ -612,4 +608,133 @@ html[data-theme="day"] footer{color:var(--text)}
   .tl-item::before{transform:scaleY(1)!important}
   .js .img-wrap img{opacity:1!important;transform:none!important}
   .theme-flash{display:none}
+}
+
+/* ==========================================================
+   v4 · 手机端优化 / 灯箱 / 视觉增强
+   规则：所有动画只使用 transform 与 opacity
+   ========================================================== */
+button,a{touch-action:manipulation}
+#progress{will-change:transform}
+html.lb-lock{overflow:hidden}
+
+/* —— 灯箱：左右切换 / 关闭 / 计数 —— */
+#lightbox img{max-height:86%}
+#lightbox img.swap{animation:fade .25s}
+.lb-nav{
+  position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;
+  width:48px;height:48px;padding:0;font:inherit;font-size:1.7rem;font-weight:700;line-height:1;color:#fff;cursor:pointer;
+  background:rgba(20,26,40,.78);border:2px solid #000;border-radius:0;
+  box-shadow:inset -3px -3px 0 rgba(0,0,0,.4),inset 3px 3px 0 rgba(255,255,255,.28);
+}
+.lb-nav:active{background:var(--accent-d)}
+.lb-prev{left:max(10px,env(safe-area-inset-left));top:50%;translate:0 -50%}
+.lb-next{right:max(10px,env(safe-area-inset-right));top:50%;translate:0 -50%}
+.lb-close{top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));width:44px;height:44px;font-size:1.1rem}
+.lb-count{
+  position:absolute;left:50%;bottom:max(14px,env(safe-area-inset-bottom));translate:-50% 0;
+  font-family:var(--pixel-font);font-size:.65rem;color:#fff;text-shadow:2px 2px 0 #000;pointer-events:none;
+}
+#lightbox[data-single="1"] .lb-prev,#lightbox[data-single="1"] .lb-next{display:none}
+
+/* —— 安全区（刘海屏 / 横屏） —— */
+header.top{padding-left:max(1.2rem,env(safe-area-inset-left))}
+main{padding-left:max(1rem,env(safe-area-inset-left));padding-right:max(1rem,env(safe-area-inset-right))}
+#toolbar{bottom:calc(16px + env(safe-area-inset-bottom))}
+#authBtn{right:max(10px,env(safe-area-inset-right));bottom:calc(10px + env(safe-area-inset-bottom))}
+.to-top{right:max(10px,env(safe-area-inset-right));bottom:calc(52px + env(safe-area-inset-bottom))}
+footer{padding-bottom:calc(5rem + env(safe-area-inset-bottom))}
+@supports (height:1dvh){.form-card{max-height:92dvh}}
+
+/* —— 表单字号 ≥16px，避免 iOS 聚焦时自动放大页面 —— */
+.form-card input,.form-card select,.form-card textarea,.lock-card input{font-size:16px}
+
+/* —— 视觉增强 —— */
+#galGrid .desc{white-space:pre-line}                         /* 诗句换行 */
+#galGrid .item h3::before{content:"▸ ";color:var(--accent)}
+.team .role{
+  display:inline-block;align-self:center;padding:.08rem .7rem;font-size:.8rem;
+  border:2px solid var(--stroke);background:rgba(0,0,0,.22);
+}
+html[data-theme="day"] .team .role{background:rgba(255,255,255,.5)}
+.sec-title{flex-wrap:wrap}
+.sec-title h2{min-width:0}
+
+/* —— 触屏：更大的点击区域 + 按压反馈 —— */
+@media (pointer:coarse){
+  .px-btn{min-height:44px;padding:.5rem 1rem}
+  .px-btn.small{min-height:40px;padding:.4rem .8rem}
+  .chip{min-height:40px;padding:.4rem .9rem}
+  nav.menu a{min-height:40px;display:flex;align-items:center}
+  .px-btn.theme-btn,.px-btn.to-top{width:44px;height:44px;padding:0}
+  #authBtn{min-height:0;width:40px;height:40px;opacity:.28}
+  .field input{font-size:16px}
+}
+@media (hover:none){
+  .item:active{transform:scale(.98)}
+}
+
+/* —— 手机（≤760px） —— */
+@media (max-width:760px){
+  /* 手机上不做实时模糊：每张卡片一层 backdrop-filter 会明显拖慢滚动 */
+  :root{--glass:rgba(18,22,34,.8)}
+  html[data-theme="day"]{--glass:rgba(255,255,255,.8)}
+  .item,.split,.hero,#toolbar{-webkit-backdrop-filter:none;backdrop-filter:none}
+  header.top{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+  .glass{box-shadow:4px 4px 0 rgba(0,0,0,.45),inset 0 0 0 2px rgba(255,255,255,.04)}
+
+  /* 顶栏：品牌 + 主题按钮一行，导航胶囊一行 */
+  header.top{
+    display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"brand theme" "nav nav";
+    align-items:center;gap:.4rem .5rem;
+    padding:calc(.5rem + env(safe-area-inset-top)) max(.8rem,env(safe-area-inset-right)) .45rem max(.8rem,env(safe-area-inset-left));
+  }
+  .brand{grid-area:brand}
+  .brand .logo{width:38px;height:38px}
+  .brand h1{font-size:1.1rem;letter-spacing:.14em;white-space:nowrap}
+  .brand .sub{font-size:.6rem;letter-spacing:.06em}
+  .theme-btn{position:static;translate:none;grid-area:theme;width:40px;height:40px}
+  nav.menu{
+    grid-area:nav;gap:.35rem;margin:0 -.8rem;padding:.1rem .8rem .2rem;
+    scroll-snap-type:x proximity;overscroll-behavior-x:contain;
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 .8rem,#000 calc(100% - 1.6rem),transparent);
+            mask-image:linear-gradient(90deg,transparent 0,#000 .8rem,#000 calc(100% - 1.6rem),transparent);
+  }
+  nav.menu a{
+    scroll-snap-align:center;padding:.3rem .85rem;font-size:.88rem;
+    border:2px solid var(--stroke);background:rgba(0,0,0,.22);
+  }
+  nav.menu a::after{left:.5rem;right:.5rem}
+  html[data-theme="day"] nav.menu a{background:rgba(255,255,255,.5)}
+
+  /* 主页 */
+  .hero{padding:1.8rem 1rem}
+  .hero .logo.big{width:72px;height:72px;margin-bottom:.8rem}
+  .hero .go .px-btn{flex:1 1 42%;justify-content:center}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+  .stats div{min-width:0;padding:.45rem .6rem}
+  .stats b{font-size:1rem}
+
+  /* 图文：先图后文，间距收紧 */
+  main{padding-top:1rem}
+  section{padding:1.1rem 0}
+  .split{gap:1rem}
+  .item{padding:.8rem}
+  #toast{top:112px}
+  body.editing{padding-bottom:7rem}
+}
+@media (max-width:420px){
+  #modGrid .field{flex-direction:column;align-items:stretch;gap:.1rem}
+  #modGrid .field span{min-width:0;font-size:.72rem}
+  .brand h1{font-size:1rem}
+}
+
+/* —— 修复：手机上网格列被内容撑宽，导致整页横向溢出、页面被缩小 —— */
+.grid>*{min-width:0}
+@media (max-width:760px){
+  .split{grid-template-columns:minmax(0,1fr)}
+  #galGrid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:420px){
+  #modGrid,#teamGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
