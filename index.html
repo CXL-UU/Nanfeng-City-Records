@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="南风市 · 我的世界建筑作品与收藏集：区域规划、背景故事、使用模组、作品展览与建造日志。">
+<meta name="theme-color" content="#0d1b2a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="南风市 · 我的世界建筑作品与收藏集">
+<meta property="og:description" content="收藏服务器里最用心的建筑作品、世界观设定与团队故事。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%2312324a'/%3E%3Crect x='12' y='1' width='3' height='3' fill='%23ffd24a'/%3E%3Crect x='1' y='10' width='3' height='6' fill='%235dd35d'/%3E%3Crect x='5' y='7' width='4' height='9' fill='%233aa43a'/%3E%3Crect x='10' y='9' width='4' height='7' fill='%232f8f2f'/%3E%3C/svg%3E">
 <script>
 /* 首屏前先确定主题，避免闪烁 */
 (function(){
@@ -15,7 +21,9 @@
 </script>
 <title>南风市 · 我的世界建筑作品与收藏集</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"></noscript>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -82,7 +90,13 @@
 </div>
 
 <div id="toast"></div>
-<div id="lightbox"><img src="" alt=""></div>
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="图片预览">
+  <img src="" alt="">
+  <button class="lb-nav lb-prev" type="button" aria-label="上一张">‹</button>
+  <button class="lb-nav lb-next" type="button" aria-label="下一张">›</button>
+  <button class="lb-nav lb-close" type="button" aria-label="关闭">✕</button>
+  <div class="lb-count"></div>
+</div>
 
 <div id="app">
   <div class="bg" id="bg"></div>
@@ -125,8 +139,7 @@
       <div class="split glass">
         <div class="media">
           <div class="img-wrap">
-            <img src="" alt="区域规划地图" loading="lazy" referrerpolicy="no-referrer">
-            <button class="copy-btn" data-act="copy" type="button">⧉ 复制链接</button>
+            <img src="" alt="区域规划地图" loading="lazy" decoding="async" referrerpolicy="no-referrer">
             <button class="swap-btn edit-only" data-act="swap" type="button">✎ 换图</button>
           </div>
         </div>
@@ -142,8 +155,7 @@
       <div class="split glass reverse">
         <div class="media">
           <div class="img-wrap">
-            <img src="" alt="背景故事插图" loading="lazy" referrerpolicy="no-referrer">
-            <button class="copy-btn" data-act="copy" type="button">⧉ 复制链接</button>
+            <img src="" alt="背景故事插图" loading="lazy" decoding="async" referrerpolicy="no-referrer">
             <button class="swap-btn edit-only" data-act="swap" type="button">✎ 换图</button>
           </div>
         </div>
@@ -211,7 +223,7 @@
 (function(){
   'use strict';
   /* ============ 配置 ============ */
-  var PASSWORD = 'mc2026';
+  var PASSWORD = 'a1472880';
   var DRAFT_KEY = 'mc_draft_v3';
 
   var $ = function(s,r){return (r||document).querySelector(s)};
@@ -241,20 +253,6 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function(){ t.className = ''; }, 2000);
   }
-  function copyText(text){
-    if(navigator.clipboard && window.isSecureContext){
-      return navigator.clipboard.writeText(text).then(function(){return true},function(){return fallback()});
-    }
-    return Promise.resolve(fallback());
-    function fallback(){
-      var ta = document.createElement('textarea');
-      ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
-      document.body.appendChild(ta); ta.focus(); ta.select();
-      var ok = false;
-      try{ ok = document.execCommand('copy'); }catch(e){}
-      ta.remove(); return ok;
-    }
-  }
   function esc(s){return String(s == null ? '' : s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
   function textOf(el){
     if(!el) return '';
@@ -283,15 +281,13 @@
   /* ============ 模板 ============ */
   function imgWrapHTML(cls, alt, src){
     return '<div class="img-wrap ' + (cls||'') + '">' +
-      '<img src="' + esc(src || '') + '" alt="' + esc(alt||'') + '" loading="lazy" referrerpolicy="no-referrer">' +
-      '<button class="copy-btn" data-act="copy" type="button">⧉ 复制链接</button>' +
+      '<img src="' + esc(src || '') + '" alt="' + esc(alt||'') + '" loading="lazy" decoding="async" referrerpolicy="no-referrer">' +
       '<button class="swap-btn edit-only" data-act="swap" type="button">✎ 换图</button>' +
     '</div>';
   }
   function logImgHTML(src){
     return '<div class="img-wrap wide">' +
-      '<img src="' + esc(src || '') + '" alt="日志配图" loading="lazy" referrerpolicy="no-referrer">' +
-      '<button class="copy-btn" data-act="copy" type="button">⧉ 复制链接</button>' +
+      '<img src="' + esc(src || '') + '" alt="日志配图" loading="lazy" decoding="async" referrerpolicy="no-referrer">' +
       '<button class="swap-btn edit-only" data-act="swap" type="button">✎ 换图</button>' +
     '</div>';
   }
@@ -583,37 +579,58 @@
     else { w.classList.remove('ld','broken'); w.classList.add('loading'); }
   }
 
+  /* ============ 灯箱（左右切换 / 手机滑动 / 键盘） ============ */
+  var lbEl = $('#lightbox'), lbImg = $('img', lbEl), lbCount = $('.lb-count', lbEl);
+  var lbList = [], lbIdx = 0, lbX = 0, lbY = 0;
+  function lbOpen(){ return lbEl.classList.contains('open'); }
+  function lbShow(i){
+    if(!lbList.length) return;
+    lbIdx = (i + lbList.length) % lbList.length;
+    var im = lbList[lbIdx];
+    lbImg.src = im.currentSrc || im.src;
+    lbImg.alt = im.alt || '';
+    lbImg.classList.remove('swap'); void lbImg.offsetWidth; lbImg.classList.add('swap');
+    lbEl.setAttribute('data-single', lbList.length < 2 ? '1' : '0');
+    lbCount.textContent = lbList.length > 1 ? (lbIdx + 1) + ' / ' + lbList.length : '';
+  }
+  function openLB(img){
+    var scope = img.closest('#galGrid') ? '#galGrid .img-wrap img'
+              : img.closest('#tl') ? '#tl .tl-item:not([hidden]) .img-wrap img' : null;
+    lbList = scope ? $$(scope).filter(function(m){ return m.getAttribute('src'); }) : [img];
+    lbShow(Math.max(0, lbList.indexOf(img)));
+    lbEl.classList.add('open');
+    document.documentElement.classList.add('lb-lock');
+  }
+  function closeLB(){ lbEl.classList.remove('open'); document.documentElement.classList.remove('lb-lock'); }
+  function lbClick(e){
+    var b = e.target.closest('.lb-nav');
+    if(b && b.classList.contains('lb-prev')) lbShow(lbIdx - 1);
+    else if(b && b.classList.contains('lb-next')) lbShow(lbIdx + 1);
+    else closeLB();
+  }
+  lbEl.addEventListener('touchstart', function(e){ var t = e.changedTouches[0]; lbX = t.clientX; lbY = t.clientY; }, {passive:true});
+  lbEl.addEventListener('touchend', function(e){
+    var t = e.changedTouches[0], dx = t.clientX - lbX, dy = t.clientY - lbY;
+    if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) lbShow(lbIdx + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+  document.addEventListener('keydown', function(e){
+    if(!lbOpen()) return;
+    if(e.key === 'Escape') closeLB();
+    else if(e.key === 'ArrowLeft') lbShow(lbIdx - 1);
+    else if(e.key === 'ArrowRight') lbShow(lbIdx + 1);
+  });
+
   /* ============ 点击（主） ============ */
   document.addEventListener('click', function(e){
-    var lb = $('#lightbox');
-    if(lb.classList.contains('open')){ lb.classList.remove('open'); return; }
+    if(lbOpen()){ lbClick(e); return; }
 
     var btn = e.target.closest('[data-act]');
     if(!btn){
       var img = e.target.closest('#galGrid .img-wrap img');
-      if(img && !editing && img.getAttribute('src')){
-        $('#lightbox img').src = img.src; lb.classList.add('open');
-      }
+      if(img && !editing && img.getAttribute('src')) openLB(img);
       return;
     }
     var act = btn.getAttribute('data-act');
-
-    if(act === 'copy'){
-      e.stopPropagation();
-      var im = btn.closest('.img-wrap').querySelector('img');
-      var src = im ? im.src : '';
-      if(!im || !im.getAttribute('src')){ toast('src 为空，请先填入图片链接', true); return; }
-      copyText(src).then(function(ok){
-        if(!ok){ toast('复制失败，请手动复制', true); return; }
-        toast('✓ 已复制');
-        var old = btn.getAttribute('data-old') || btn.textContent;
-        btn.setAttribute('data-old', old);
-        btn.textContent = '✓ 已复制'; btn.classList.add('ok');
-        clearTimeout(btn._t);
-        btn._t = setTimeout(function(){ btn.textContent = old; btn.classList.remove('ok'); }, 1300);
-      });
-      return;
-    }
 
     if(!editing) return;
 
@@ -767,6 +784,7 @@
   function isDay(){ return document.documentElement.getAttribute('data-theme') === 'day'; }
   function applyTheme(t){
     document.documentElement.setAttribute('data-theme', t);
+    var tc = $('meta[name="theme-color"]'); if(tc) tc.setAttribute('content', t === 'day' ? '#6fc3f3' : '#0d1b2a');
     var b = $('.theme-btn');
     if(b){
       b.textContent = t === 'day' ? '🌙' : '☀️';
@@ -919,7 +937,7 @@
     var b = e.target.closest('[data-act]');
     if(!b){
       var im = e.target.closest('.tl-card .img-wrap img');
-      if(im && !editing && im.getAttribute('src')){ $('#lightbox img').src = im.src; $('#lightbox').classList.add('open'); }
+      if(im && !editing && im.getAttribute('src')) openLB(im);
       return;
     }
     var act = b.getAttribute('data-act');
@@ -1057,6 +1075,7 @@
       heroEls.forEach(function(p){ p[0].style.translate = '0 ' + (s * p[1]).toFixed(1) + 'px'; });
     }
     function frame(ts){
+      if(W < 760 && ts - last < 30){ requestAnimationFrame(frame); return; }
       var dt = Math.min(50, ts - last) / 16.67; last = ts;
       var ty = window.pageYOffset || 0;
       sy += (ty - sy) * Math.min(1, .12 * dt);
